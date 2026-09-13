@@ -9168,17 +9168,17 @@
         "verified_proxy_module": "verified_proxy_module"
       },
       "locked": {
-        "lastModified": 1789315494,
-        "narHash": "sha256-0eDPpXbvlhk8ZYuUZveHHoJ6aaCMEhjpwj3GE1+TLC4=",
+        "lastModified": 1789323370,
+        "narHash": "sha256-DO/j6DViDu3mWW++ofLVY1p1Pq3GbdWFk4gl8aXhTdA=",
         "owner": "logos-fleet",
         "repo": "logos-evm-eth-rpc-module",
-        "rev": "40dc4b526468c8627a3b699b70f79e90d32cdd7e",
+        "rev": "bc360375a21541fcb541d3d3c6b71132c3eeb22e",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-eth-rpc-module",
-        "rev": "40dc4b526468c8627a3b699b70f79e90d32cdd7e",
+        "rev": "bc360375a21541fcb541d3d3c6b71132c3eeb22e",
         "type": "github"
       }
     },
@@ -9357,17 +9357,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789319576,
-        "narHash": "sha256-k1ywB8kO4OCezR8QanawINqTUBlXE0womR6A5Xjd+zI=",
+        "lastModified": 1789323382,
+        "narHash": "sha256-W0Z6N/vebHzzfQjWOI2MxI5fbUP7chKuIP5r00LrH18=",
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "2604fc8b6ccaf97c2a90347481184a487da9586b",
+        "rev": "c99cda92762d7288a9cd9eb13aa64902048dcde3",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "2604fc8b6ccaf97c2a90347481184a487da9586b",
+        "rev": "c99cda92762d7288a9cd9eb13aa64902048dcde3",
         "type": "github"
       }
     },
