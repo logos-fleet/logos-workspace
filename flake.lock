@@ -9280,17 +9280,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1782084642,
-        "narHash": "sha256-1bg/85Bwy4usNUGdDv0kkvBydjWSXBR0h9XXGjq8LFg=",
+        "lastModified": 1788920745,
+        "narHash": "sha256-2FPLB+zf5QNeVfVvN2A6iRXeDcIHhgH8wUgaPTw1xKk=",
         "owner": "logos-fleet",
         "repo": "logos-evm-uniswap-module",
-        "rev": "df069a7eab47d705eb3b519092a5e41e85ddd7f1",
+        "rev": "30350e191662f206aefc9667abba902a5116e059",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-uniswap-module",
-        "rev": "df069a7eab47d705eb3b519092a5e41e85ddd7f1",
+        "rev": "30350e191662f206aefc9667abba902a5116e059",
         "type": "github"
       }
     },

@@ -391,7 +391,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-uniswap-module = {
-      url = "github:logos-fleet/logos-evm-uniswap-module/df069a7eab47d705eb3b519092a5e41e85ddd7f1";
+      url = "github:logos-fleet/logos-evm-uniswap-module/30350e191662f206aefc9667abba902a5116e059";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
