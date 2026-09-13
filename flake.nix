@@ -174,7 +174,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/9a04b1d8576c452935c2a7f49f2279ebfc69d0f1";
+      url = "github:logos-fleet/logos-basecamp/5f7e8ca2b4da1f6d0b69785dc772695b6c5e387b";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
@@ -383,7 +383,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-eth-rpc-module = {
-      url = "github:logos-fleet/logos-evm-eth-rpc-module/88ec849c87abeced3d825ece083135bf21514826";
+      url = "github:logos-fleet/logos-evm-eth-rpc-module/40dc4b526468c8627a3b699b70f79e90d32cdd7e";
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-token-list-module = {
@@ -402,22 +402,16 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-wallet-backend-module = {
-      url = "github:logos-fleet/logos-evm-wallet-backend-module/584dbfe3195ec6dfe4c0d8b91fabb02ac2d963f4";
+      url = "github:logos-fleet/logos-evm-wallet-backend-module/5ed06f701622389658d6b55d1b5c5a2bf6cce508";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
       inputs.keystore_module.follows = "logos-evm-keystore-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
-      inputs.railgun_module.follows = "logos-evm-railgun-module";
       inputs.token_list_module.follows = "logos-evm-token-list-module";
       inputs.uniswap_module.follows = "logos-evm-uniswap-module";
     };
     logos-evm-wallet-ui = {
-      url = "github:logos-fleet/logos-evm-wallet-ui/779a2da0c0b6cc9ae1549f2659b573962b4d273b";
-      inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
-      inputs.keystore_module.follows = "logos-evm-keystore-module";
+      url = "github:logos-fleet/logos-evm-wallet-ui/2604fc8b6ccaf97c2a90347481184a487da9586b";
       inputs.logos-module-builder.follows = "logos-module-builder";
-      inputs.railgun_module.follows = "logos-evm-railgun-module";
-      inputs.token_list_module.follows = "logos-evm-token-list-module";
-      inputs.uniswap_module.follows = "logos-evm-uniswap-module";
       inputs.wallet_backend_module.follows = "logos-evm-wallet-backend-module";
     };
     # END AUTO-INPUTS
