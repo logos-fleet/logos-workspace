@@ -903,6 +903,9 @@
         "logos-design-system": [
           "logos-design-system"
         ],
+        "logos-evm-keystore-module": [
+          "logos-evm-keystore-module"
+        ],
         "logos-liblogos": [
           "logos-liblogos"
         ],
@@ -966,17 +969,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789282452,
-        "narHash": "sha256-QNcvHN+dQ7VDSJ92iJZWX4NJhqVe+Tn5RA3aLl5XYro=",
+        "lastModified": 1789300818,
+        "narHash": "sha256-E4I6AI6Z9iXcxdRVDkOcfLrnIt0g9iyCO04MixUdOE4=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "eaa15b49fbd137d3b14e6b736efb52ceb6bb60c5",
+        "rev": "6d3738cf0635713c53f542c7086b2ef3050b3257",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "eaa15b49fbd137d3b14e6b736efb52ceb6bb60c5",
+        "rev": "6d3738cf0635713c53f542c7086b2ef3050b3257",
         "type": "github"
       }
     },
