@@ -121,7 +121,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-module-builder = {
-      url = "github:logos-fleet/logos-module-builder/162c05c462d8a45feeade1fdd9f5fae5e010f45f";
+      url = "github:logos-fleet/logos-module-builder/ad6b060713dcc9278dc5539e2eeff78f9d1b3240";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-design-system.follows = "logos-design-system";
       inputs.logos-module.follows = "logos-module";
@@ -174,14 +174,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/9ff6cee2577e3f7ad1442f8269c5f77e73ebeec5";
+      url = "github:logos-fleet/logos-basecamp/9a04b1d8576c452935c2a7f49f2279ebfc69d0f1";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-delivery-module.follows = "logos-delivery-module";
       inputs.logos-design-system.follows = "logos-design-system";
+      inputs.logos-evm-eth-rpc-module.follows = "logos-evm-eth-rpc-module";
       inputs.logos-evm-keystore-module.follows = "logos-evm-keystore-module";
+      inputs.logos-evm-wallet-ui.follows = "logos-evm-wallet-ui";
       inputs.logos-liblogos.follows = "logos-liblogos";
       inputs.logos-libp2p-module.follows = "logos-libp2p-module";
       inputs.logos-module.follows = "logos-module";
@@ -381,7 +383,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-eth-rpc-module = {
-      url = "github:logos-fleet/logos-evm-eth-rpc-module/8a825cdbf0b78de4af30b6250e91b08d2e1ba1d7";
+      url = "github:logos-fleet/logos-evm-eth-rpc-module/88ec849c87abeced3d825ece083135bf21514826";
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-token-list-module = {
@@ -409,7 +411,7 @@
       inputs.uniswap_module.follows = "logos-evm-uniswap-module";
     };
     logos-evm-wallet-ui = {
-      url = "github:logos-fleet/logos-evm-wallet-ui/68f7c4fe6005990dea38de67d6853d12d9045872";
+      url = "github:logos-fleet/logos-evm-wallet-ui/31b4ddeb38f7a8aa19f43146be5778e64b873783";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
       inputs.keystore_module.follows = "logos-evm-keystore-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
