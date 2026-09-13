@@ -17851,17 +17851,17 @@
         "rust-overlay": "rust-overlay_15"
       },
       "locked": {
-        "lastModified": 1789308535,
-        "narHash": "sha256-Gp8czTLrH2OkhdAQU2Dw4GaHLp337S9XQgPZaocEjxU=",
+        "lastModified": 1789310557,
+        "narHash": "sha256-vAiPAJv2Om8LDGs74Vb5+96WNQNv7nmKdqpjBE0cjH8=",
         "owner": "logos-fleet",
         "repo": "logos-module-builder",
-        "rev": "ad6b060713dcc9278dc5539e2eeff78f9d1b3240",
+        "rev": "0c770b15bfa5a32b932473a8ae7342461b522a68",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-module-builder",
-        "rev": "ad6b060713dcc9278dc5539e2eeff78f9d1b3240",
+        "rev": "0c770b15bfa5a32b932473a8ae7342461b522a68",
         "type": "github"
       }
     },
