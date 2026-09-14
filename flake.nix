@@ -74,7 +74,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-liblogos = {
-      url = "github:logos-fleet/logos-liblogos/047f28f2a55ebb3dfdcbd5e9670e055594ee3885";
+      url = "github:logos-fleet/logos-liblogos/d7f2325c62f830ceffe9e39bddb0b4c93d670ce5";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-module.follows = "logos-module";
@@ -88,7 +88,7 @@
       inputs.process-stats.follows = "process-stats";
     };
     logos-logoscore-cli = {
-      url = "github:logos-fleet/logos-logoscore-cli/1bd240ac3ab27bd579b07b87756e976007647c45";
+      url = "github:logos-fleet/logos-logoscore-cli/88d4c45e91151d997b4c84d8c3da1163bcda6362";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-js-sdk.follows = "logos-js-sdk";
@@ -121,7 +121,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-module-builder = {
-      url = "github:logos-fleet/logos-module-builder/c32def51de24925b0dac893ae86435a7a1a505d6";
+      url = "github:logos-fleet/logos-module-builder/06e17e28208b833ac1b47e8190468123b7f56b67";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-design-system.follows = "logos-design-system";
       inputs.logos-module.follows = "logos-module";
@@ -174,7 +174,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/8b1b5aa89de76a3b6fe7aa382983f2b3fddddd58";
+      url = "github:logos-fleet/logos-basecamp/1cb05c6a5fa8c40dc1fcde51ad0db769e1142ce0";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
@@ -410,7 +410,7 @@
       inputs.uniswap_module.follows = "logos-evm-uniswap-module";
     };
     logos-evm-wallet-ui = {
-      url = "github:logos-fleet/logos-evm-wallet-ui/c99cda92762d7288a9cd9eb13aa64902048dcde3";
+      url = "github:logos-fleet/logos-evm-wallet-ui/9f73e0f97db9caff4ad515b8dd574379055573bc";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.wallet_backend_module.follows = "logos-evm-wallet-backend-module";
     };
