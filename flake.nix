@@ -37,7 +37,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-qt-sdk = {
-      url = "github:logos-fleet/logos-qt-sdk/b2ebecc0b7fb6a801dfbde9df60525a0c6dc0a82";
+      url = "github:logos-fleet/logos-qt-sdk/a115ecef4e3dbd56dc3dec32c9619f34777353c9";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-nix.follows = "logos-nix";
       inputs.logos-plugin-qt.follows = "logos-plugin-qt";
@@ -45,7 +45,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-cpp-sdk = {
-      url = "github:logos-fleet/logos-cpp-sdk/41ca4491f0163e0735511b6ac7d9020dec88a84c";
+      url = "github:logos-fleet/logos-cpp-sdk/51c293ad0a190691cc52135fed4bee5ce75561a5";
       inputs.logos-nix.follows = "logos-nix";
       inputs.logos-protocol.follows = "logos-protocol";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -121,7 +121,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-module-builder = {
-      url = "github:logos-fleet/logos-module-builder/06e17e28208b833ac1b47e8190468123b7f56b67";
+      url = "github:logos-fleet/logos-module-builder/a8185231f29289549f6b2efe9ddcc9438ef6c810";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-design-system.follows = "logos-design-system";
       inputs.logos-module.follows = "logos-module";
@@ -174,7 +174,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/cb9cff63995ee1885b708836d7b7ee2aba5af8de";
+      url = "github:logos-fleet/logos-basecamp/37bb82eb985568a15420d7c4f497e75beddb4fb8";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
@@ -233,7 +233,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-package-downloader = {
-      url = "github:logos-fleet/logos-package-downloader/424d7735aeee0afc72711bbb96e23c092152544c";
+      url = "github:logos-fleet/logos-package-downloader/97ef1a7a869e78789bf37ee01d94620b020a14e7";
       inputs.logos-nix.follows = "logos-nix";
       inputs.logos-package.follows = "logos-package";
       inputs.nix-bundle-appimage.follows = "nix-bundle-appimage";
