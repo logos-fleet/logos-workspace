@@ -71,7 +71,7 @@
   process-stats                   = { deps = [ "logos-nix" ]; follows = { "logos-nix" = "logos-nix"; "nixpkgs" = "nixpkgs"; }; hasTests = true; };
   logos-module-viewer             = { deps = [ "logos-cpp-sdk" "logos-liblogos" "logos-capability-module" "logos-package-manager" ]; follows = { "logos-capability-module" = "logos-capability-module"; "logos-cpp-sdk" = "logos-cpp-sdk"; "logos-liblogos" = "logos-liblogos"; "logos-package-manager" = "logos-package-manager"; "nixpkgs" = "nixpkgs"; }; hasTests = false; };
   logos-evm-net-proxy             = { deps = []; follows = {}; hasTests = true; };
-  logos-evm-keystore-module       = { deps = [ "logos-module-builder" ]; follows = { "logos-module-builder" = "logos-module-builder"; }; hasTests = false; };
+  logos-evm-keystore-module       = { deps = [ "logos-module-builder" ]; follows = { "logos-module-builder" = "logos-module-builder"; }; hasTests = true; };
   logos-evm-eth-rpc-module        = { deps = [ "logos-module-builder" ]; follows = { "logos-module-builder" = "logos-module-builder"; }; hasTests = false; };
   logos-evm-token-list-module     = { deps = [ "logos-module-builder" ]; follows = { "logos-module-builder" = "logos-module-builder"; }; hasTests = false; };
   logos-evm-uniswap-module        = { deps = [ "logos-module-builder" "logos-evm-eth-rpc-module" ]; follows = { "eth_rpc_module" = "logos-evm-eth-rpc-module"; "logos-module-builder" = "logos-module-builder"; }; hasTests = false; };
