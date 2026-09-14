@@ -194,6 +194,17 @@ to humans but carry no cryptographic binding to any external identity.
 
 ## 3. Trust Mechanism for Installation
 
+> **Decided, 2026-09-14 — `docs/adr/0008-the-local-keyring-is-the-only-trust-anchor-set.md`.**
+> The local `did:jwk` keyring is the ONLY trust-anchor set, and nothing enters
+> it except by an explicit user act. COSE (`manifest.cose`, upstream
+> `logos-co/logos-liblogos#68`) is a *load-time* integrity check on the same
+> Ed25519 key and the same DID, at a different checkpoint — not a second
+> format for this one and not a second anchor set. A repository's
+> `trustedSigners` is advisory display data: parsed, echoed, consulted by
+> nothing. Sections 3.2–3.6 below are the design this decision scopes; the
+> "Always Trust" affordance in 3.3/3.4 is what a phone still does not have,
+> and §4 remains future work. Read the ADR first.
+
 ### 3.1 Current State
 
 `PackageManagerImpl::installPlugin()` already calls
@@ -344,6 +355,13 @@ A workspace- or system-level policy could pre-decide some of these prompts:
    │          │ trusted_as is populated.                           │
    └──────────┴────────────────────────────────────────────────────┘
 ```
+
+This is no longer optional or hypothetical: all three levels are implemented in
+`PackageManagerLib`, `WARN` is the library default that desktop runs on, and a
+mobile Store shell sets `REQUIRE` (`ShellStoreBackend::configure`). At `WARN`
+the anchor set changes the DIAGNOSTIC; at `REQUIRE` it changes the DECISION.
+Both cells are covered by tests in all three repos — see ADR 0008's
+Consequences for the list.
 
 ---
 
