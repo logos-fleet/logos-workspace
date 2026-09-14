@@ -1320,15 +1320,53 @@ _json_array_to_lines() {
 }
 
 # Discover checks and test-like packages via nix eval.
-# When override flags are present, uses installable syntax (flake ref + attribute)
-# so --override-input flags are respected (builtins.getFlake ignores them).
+#
+# ASK THE FLAKE THAT WILL BUILD. When overrides are active the build goes
+# through the WORKSPACE flake (see _test_one_repo below), because only its
+# `follows` carry an --override-input down to a TRANSITIVE dep; an override
+# aimed at `path:repos/<x>` reaches that repo's direct inputs and stops there.
+# Discovering against the sub-repo instead can miss an output that exists only
+# under the workspace closure: the check is never run and the repo reports
+# green. That is the class of bug logos-workspace#91 was — a `web`-variant
+# check gated on a fixture one set of pins supplies and another does not.
 _discover_test_outputs() {
   local repo_path="$1"
   local system="$2"
   local override_flags="${3:-}"
+  local input_name="${4:-}"
+  local use_workspace_flake="${5:-false}"
 
-  if [[ -n "$override_flags" ]]; then
-    # Two evals with explicit attribute paths — --override-input applies to the flake ref
+  # Nix fragment, shared by all three branches: keep only test-looking names.
+  local keep_test_names='builtins.filter (n: builtins.match ".*[Tt]est.*" n != null)'
+
+  if [[ "$use_workspace_flake" == "true" && -n "$input_name" ]]; then
+    # The workspace flake forwards EVERY repo's outputs, each prefixed with
+    # `<input>--` (a repo's `default` package keeps the bare repo name). Keep
+    # this repo's prefixed names and strip the prefix, so what is handed back
+    # is the sub-repo's own names, exactly as the other two branches return
+    # them — and every other repo's outputs, `default` included, drop out.
+    local own_names='ns:
+      let p = "'"${input_name}"'--"; l = builtins.stringLength p; in
+      map (n: builtins.substring l (-1) n)
+        (builtins.filter (n: builtins.substring 0 l n == p) (builtins.attrNames ns))'
+    local checks_json test_pkgs_json
+
+    # shellcheck disable=SC2086
+    checks_json=$(nix eval --extra-experimental-features "nix-command flakes" \
+      --json "${WORKSPACE_ROOT}#checks.${system}" \
+      --apply "$own_names" \
+      $override_flags 2>/dev/null) || checks_json='[]'
+
+    # shellcheck disable=SC2086
+    test_pkgs_json=$(nix eval --extra-experimental-features "nix-command flakes" \
+      --json "${WORKSPACE_ROOT}#packages.${system}" \
+      --apply "ps: $keep_test_names (($own_names) ps)" \
+      $override_flags 2>/dev/null) || test_pkgs_json='[]'
+
+    echo "{\"checks\":${checks_json},\"testPkgs\":${test_pkgs_json}}"
+  elif [[ -n "$override_flags" ]]; then
+    # Overrides without the workspace flake: installable syntax so
+    # --override-input applies to the flake ref (builtins.getFlake ignores it).
     local checks_json test_pkgs_json
 
     # shellcheck disable=SC2086
@@ -1340,7 +1378,7 @@ _discover_test_outputs() {
     # shellcheck disable=SC2086
     test_pkgs_json=$(nix eval --extra-experimental-features "nix-command flakes" \
       --json "path:${repo_path}#packages.${system}" \
-      --apply 'ps: builtins.filter (n: builtins.match ".*[Tt]est.*" n != null) (builtins.attrNames ps)' \
+      --apply "ps: $keep_test_names (builtins.attrNames ps)" \
       $override_flags 2>/dev/null) || test_pkgs_json='[]'
 
     echo "{\"checks\":${checks_json},\"testPkgs\":${test_pkgs_json}}"
@@ -1352,7 +1390,7 @@ _discover_test_outputs() {
           flake = builtins.getFlake "path:'"$repo_path"'";
           checks = builtins.attrNames (flake.checks.'"$system"' or {});
           packages = builtins.attrNames (flake.packages.'"$system"' or {});
-          testPkgs = builtins.filter (n: builtins.match ".*[Tt]est.*" n != null) packages;
+          testPkgs = '"$keep_test_names"' packages;
         in builtins.toJSON { inherit checks testPkgs; }
       ' 2>/dev/null || echo '{"checks":[],"testPkgs":[]}'
   fi
@@ -1390,7 +1428,8 @@ _test_one_repo() {
   # Discover checks + test packages in one eval
   log "  ${BLUE}Discovering test outputs...${NC}"
   local outputs
-  outputs=$(_discover_test_outputs "$repo_path" "$system" "$override_flags")
+  outputs=$(_discover_test_outputs "$repo_path" "$system" "$override_flags" \
+    "$input_name" "$use_workspace_flake")
 
   # Capture each whole bracketed array (a repo may have several checks).
   local checks_json test_pkgs_json
