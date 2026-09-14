@@ -10483,17 +10483,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789362814,
-        "narHash": "sha256-CO2Xv9D6a3KiRGMkScNTP7sfuy6eZXQsIB+GlWAMi+g=",
+        "lastModified": 1789364838,
+        "narHash": "sha256-I0kiC/+oHqAsOlgp+iyxWvadAn5RlQcCC+JjNALVG5o=",
         "owner": "logos-fleet",
         "repo": "logos-liblogos",
-        "rev": "dbcec73196404f209d53aa8f01733ce3af744ef4",
+        "rev": "33bf39417bb8a485f597305cb89398ad409ee5ca",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-liblogos",
-        "rev": "dbcec73196404f209d53aa8f01733ce3af744ef4",
+        "rev": "33bf39417bb8a485f597305cb89398ad409ee5ca",
         "type": "github"
       }
     },
