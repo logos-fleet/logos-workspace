@@ -1323,17 +1323,12 @@ _json_array_to_lines() {
 #
 # ASK THE FLAKE THAT WILL BUILD. When overrides are active the build goes
 # through the WORKSPACE flake (see _test_one_repo below), because only its
-# `follows` carry an --override-input down to a TRANSITIVE dep;
-# `--override-input` aimed at `path:repos/<x>` reaches that repo's direct
-# inputs and stops there. Discovery asked the sub-repo anyway, so the two
-# could disagree about which outputs exist at all — and a check that is gated
-# on a pin only the workspace closure supplies is then never discovered, never
-# run, and reported as a green repo.
-#
-# That is the class of bug logos-workspace#91 was: a `web`-variant check whose
-# fixture existed under one set of pins and not another, silently not running.
-# A gate that prints its reason (which #91 also added, in logos-basecamp and
-# logos-module-builder) only helps if something asks the flake that has it.
+# `follows` carry an --override-input down to a TRANSITIVE dep; an override
+# aimed at `path:repos/<x>` reaches that repo's direct inputs and stops there.
+# Discovering against the sub-repo instead can miss an output that exists only
+# under the workspace closure: the check is never run and the repo reports
+# green. That is the class of bug logos-workspace#91 was — a `web`-variant
+# check gated on a fixture one set of pins supplies and another does not.
 _discover_test_outputs() {
   local repo_path="$1"
   local system="$2"
@@ -1341,33 +1336,31 @@ _discover_test_outputs() {
   local input_name="${4:-}"
   local use_workspace_flake="${5:-false}"
 
+  # Nix fragment, shared by all three branches: keep only test-looking names.
+  local keep_test_names='builtins.filter (n: builtins.match ".*[Tt]est.*" n != null)'
+
   if [[ "$use_workspace_flake" == "true" && -n "$input_name" ]]; then
-    # The workspace flake prefixes every forwarded output with `<input>--`
-    # (`default` keeps the bare repo name for packages). Strip the prefix so
-    # the names handed back are the sub-repo's own, exactly as the non-override
-    # path returns them.
-    local prefix="${input_name}--"
+    # The workspace flake forwards EVERY repo's outputs, each prefixed with
+    # `<input>--` (a repo's `default` package keeps the bare repo name). Keep
+    # this repo's prefixed names and strip the prefix, so what is handed back
+    # is the sub-repo's own names, exactly as the other two branches return
+    # them — and every other repo's outputs, `default` included, drop out.
+    local own_names='ns:
+      let p = "'"${input_name}"'--"; l = builtins.stringLength p; in
+      map (n: builtins.substring l (-1) n)
+        (builtins.filter (n: builtins.substring 0 l n == p) (builtins.attrNames ns))'
     local checks_json test_pkgs_json
 
     # shellcheck disable=SC2086
     checks_json=$(nix eval --extra-experimental-features "nix-command flakes" \
       --json "${WORKSPACE_ROOT}#checks.${system}" \
-      --apply 'ns:
-        let p = "'"${prefix}"'"; l = builtins.stringLength p; in
-        map (n: builtins.substring l (-1) n)
-          (builtins.filter (n: builtins.substring 0 l n == p) (builtins.attrNames ns))' \
+      --apply "$own_names" \
       $override_flags 2>/dev/null) || checks_json='[]'
 
-    # Packages are forwarded the same way, with `default` under the bare name —
-    # which never matches *test*, so only the prefixed ones matter here.
     # shellcheck disable=SC2086
     test_pkgs_json=$(nix eval --extra-experimental-features "nix-command flakes" \
       --json "${WORKSPACE_ROOT}#packages.${system}" \
-      --apply 'ps:
-        let p = "'"${prefix}"'"; l = builtins.stringLength p; in
-        builtins.filter (n: builtins.match ".*[Tt]est.*" n != null)
-          (map (n: builtins.substring l (-1) n)
-            (builtins.filter (n: builtins.substring 0 l n == p) (builtins.attrNames ps)))' \
+      --apply "ps: $keep_test_names (($own_names) ps)" \
       $override_flags 2>/dev/null) || test_pkgs_json='[]'
 
     echo "{\"checks\":${checks_json},\"testPkgs\":${test_pkgs_json}}"
@@ -1385,7 +1378,7 @@ _discover_test_outputs() {
     # shellcheck disable=SC2086
     test_pkgs_json=$(nix eval --extra-experimental-features "nix-command flakes" \
       --json "path:${repo_path}#packages.${system}" \
-      --apply 'ps: builtins.filter (n: builtins.match ".*[Tt]est.*" n != null) (builtins.attrNames ps)' \
+      --apply "ps: $keep_test_names (builtins.attrNames ps)" \
       $override_flags 2>/dev/null) || test_pkgs_json='[]'
 
     echo "{\"checks\":${checks_json},\"testPkgs\":${test_pkgs_json}}"
@@ -1397,7 +1390,7 @@ _discover_test_outputs() {
           flake = builtins.getFlake "path:'"$repo_path"'";
           checks = builtins.attrNames (flake.checks.'"$system"' or {});
           packages = builtins.attrNames (flake.packages.'"$system"' or {});
-          testPkgs = builtins.filter (n: builtins.match ".*[Tt]est.*" n != null) packages;
+          testPkgs = '"$keep_test_names"' packages;
         in builtins.toJSON { inherit checks testPkgs; }
       ' 2>/dev/null || echo '{"checks":[],"testPkgs":[]}'
   fi
