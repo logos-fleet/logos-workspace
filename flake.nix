@@ -174,7 +174,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/58f805cfe7775db39ac31361a47d27b40d1061d9";
+      url = "github:logos-fleet/logos-basecamp/c3cfab6bb1781c28017daba1995ec1082ff85c82";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
