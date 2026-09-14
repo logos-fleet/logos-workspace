@@ -22,6 +22,13 @@ Rules:
   SIM=$(claim "$FLEET_IOS_UDIDS") || { echo "no iOS device free"; }
   ```
 
+  A claimed simulator may be **shut down** — nothing in the runner boots one, so a run
+  against it dies at install. Boot it yourself after the claim and wait for it:
+
+  ```bash
+  xcrun simctl boot "$SIM" 2>/dev/null; xcrun simctl bootstatus "$SIM" -b
+  ```
+
   Release it when you are done (`rm -rf /tmp/fleet-devices/<id>`), and release it before
   you finish even if your run failed. If nothing is free, wait and retry a few times; if it
   stays busy, build only and say so in the issue rather than sharing a device. State in the
