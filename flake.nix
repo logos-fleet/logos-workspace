@@ -174,7 +174,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/6d55e0d867f2bfb6e645b7dabbd159de7bf126d9";
+      url = "github:logos-fleet/logos-basecamp/ad670780446e23f04ab4d71eedc9bc035fe66578";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
@@ -233,7 +233,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-package-downloader = {
-      url = "github:logos-fleet/logos-package-downloader/424d7735aeee0afc72711bbb96e23c092152544c";
+      url = "github:logos-fleet/logos-package-downloader/cdb185b41050c1ba218c91d1400dcbf47d5f642d";
       inputs.logos-nix.follows = "logos-nix";
       inputs.logos-package.follows = "logos-package";
       inputs.nix-bundle-appimage.follows = "nix-bundle-appimage";
