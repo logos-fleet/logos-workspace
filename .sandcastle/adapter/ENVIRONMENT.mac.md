@@ -20,9 +20,43 @@ Rules:
   }
   source .sandcastle/devices.env
   SIM=$(claim "$FLEET_IOS_UDIDS") || { echo "no iOS device free"; }
+  PHONE=$(claim "$FLEET_ANDROID_SERIALS") || { echo "no Android device free"; }
   ```
 
-  Release it when you are done (`rm -rf /tmp/fleet-devices/<id>`), and release it before
+  Claim Android the same way — there are **two** Android devices now, so an unqualified
+  `adb shell` fails with "more than one device". Pass `-s "$PHONE"` on every adb call
+  rather than relying on `ANDROID_SERIAL`, which names only the first entry. The second
+  entry (`HA26QKR0`, Lenovo TB520FU, 1840x2944) is the venue's only Android TABLET: claim
+  it by serial for anything layout-shaped, and leave the phone for everything else.
+
+  The helper is **bash** — `for id in $1` relies on word splitting, which zsh does not do.
+
+  **Boot what you claimed, and shut down what you booted.** Nothing in the runner boots a
+  simulator, so a run against a shut-down one dies at install — and a booted simulator
+  nobody is using costs GBs of RAM. Four of them idling put this Mac into swap: load 865,
+  1.3 GB free, and a 3-minute build took ten. So a simulator is booted for the length of
+  one run and shut down at the end of it:
+
+  ```bash
+  BOOTED_IT=no
+  xcrun simctl list devices booted | grep -q "$SIM" || {
+    xcrun simctl boot "$SIM" 2>/dev/null; BOOTED_IT=yes; }
+  xcrun simctl bootstatus "$SIM" -b            # wait for it either way
+  # ... your run ...
+  [ "$BOOTED_IT" = yes ] && xcrun simctl shutdown "$SIM"   # only what YOU booted
+  ```
+
+  The `BOOTED_IT` guard matters: a simulator that was ALREADY booted when you claimed it
+  may be one a person is looking at, and shutting it down takes their app away mid-test.
+  Leave those running and shut down only the one you started.
+
+  An Android device that **locks its screen** backgrounds your app and its console goes
+  silent with the process still alive — a stall that reads exactly like a hang (it cost
+  issue 110 twenty minutes). Both devices are set to stay awake while charging; if one
+  locks anyway, `adb -s <serial> shell input keyevent KEYCODE_WAKEUP` then swipe up, and
+  the SAME run resumes. Screencap before concluding anything about a silent Android run.
+
+  Release it when you are done (`rm -rf /tmp/fleet-devices/<id>`, after the shutdown above), and release it before
   you finish even if your run failed. If nothing is free, wait and retry a few times; if it
   stays busy, build only and say so in the issue rather than sharing a device. State in the
   issue which device the evidence came from.
