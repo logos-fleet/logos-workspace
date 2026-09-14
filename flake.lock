@@ -8235,17 +8235,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789416911,
-        "narHash": "sha256-QoI17khnSlIJRJoNZLP48tv71r0YICqbuJOzDM3aXW4=",
+        "lastModified": 1789419957,
+        "narHash": "sha256-KlvsspYPAqVbc6IcQOOP6gtRnHZQUX9TWPv8RZ0CD+Q=",
         "owner": "logos-fleet",
         "repo": "logos-delivery-module",
-        "rev": "9b9cbb94297c98fbaff9f032bb2143035c158081",
+        "rev": "6cee94f8df4a4a64a853adc5b07bf1bc19d3bdcb",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-delivery-module",
-        "rev": "9b9cbb94297c98fbaff9f032bb2143035c158081",
+        "rev": "6cee94f8df4a4a64a853adc5b07bf1bc19d3bdcb",
         "type": "github"
       }
     },
