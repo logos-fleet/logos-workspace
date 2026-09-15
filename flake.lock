@@ -1006,17 +1006,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789509525,
-        "narHash": "sha256-sfuTbQt7n5+vv3Vvn1/6CjLv+X/nBs7JXXEEFJahYoM=",
+        "lastModified": 1789510997,
+        "narHash": "sha256-SYPMleOwmkDteFfz0iwuT3C8/gMPRUpdSKXKffXruRM=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "651787df696675c692dc9731d1bec8f9ae0c846c",
+        "rev": "bb1bb0baa7d486d80228009740cc111b11e9a147",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "651787df696675c692dc9731d1bec8f9ae0c846c",
+        "rev": "bb1bb0baa7d486d80228009740cc111b11e9a147",
         "type": "github"
       }
     },
@@ -9266,17 +9266,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789414024,
-        "narHash": "sha256-A4zR5bmuTJg32xb/9F1qpvK42xAooSv9yYG3LoyjKNU=",
+        "lastModified": 1789506369,
+        "narHash": "sha256-lDiFxw/rb6986HANb7vTb0kUiWFkEOZkLEisFwVcSEA=",
         "owner": "logos-fleet",
         "repo": "logos-evm-railgun-module",
-        "rev": "d2607eee84f0748667d56268f3d23028416aa7f1",
+        "rev": "44ec398725691b94f5a67b0dc8a175738d01fdc3",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-railgun-module",
-        "rev": "d2607eee84f0748667d56268f3d23028416aa7f1",
+        "rev": "44ec398725691b94f5a67b0dc8a175738d01fdc3",
         "type": "github"
       }
     },
@@ -85571,17 +85571,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789123140,
-        "narHash": "sha256-zhcv0PHBS8WvClIta1nDkP5+fuVFkTwp5BUYVWf1at0=",
+        "lastModified": 1789502730,
+        "narHash": "sha256-is2/iD5678SkS61v6ji3I1plcLuAWtny0/UfRkC0GXI=",
         "owner": "logos-fleet",
         "repo": "nix-bundle-lgx",
-        "rev": "237e42f1fcb70f1e77cedb48daf5cba0498e204a",
+        "rev": "e9fe75eb6aad48c7a78eb925793f239c1de93375",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "nix-bundle-lgx",
-        "rev": "237e42f1fcb70f1e77cedb48daf5cba0498e204a",
+        "rev": "e9fe75eb6aad48c7a78eb925793f239c1de93375",
         "type": "github"
       }
     },
