@@ -934,6 +934,9 @@
         "logos-evm-keystore-module": [
           "logos-evm-keystore-module"
         ],
+        "logos-evm-railgun-module": [
+          "logos-evm-railgun-module"
+        ],
         "logos-evm-token-list-module": [
           "logos-evm-token-list-module"
         ],
@@ -1006,17 +1009,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789510997,
-        "narHash": "sha256-SYPMleOwmkDteFfz0iwuT3C8/gMPRUpdSKXKffXruRM=",
+        "lastModified": 1789515479,
+        "narHash": "sha256-FfURLKFXCxpH2kpzIdfJiaNMFQtrxKZB8RYk/ZmQvDs=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "bb1bb0baa7d486d80228009740cc111b11e9a147",
+        "rev": "e1d06240b87fd5825f0e2a7be147668bf66b9dbb",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "bb1bb0baa7d486d80228009740cc111b11e9a147",
+        "rev": "e1d06240b87fd5825f0e2a7be147668bf66b9dbb",
         "type": "github"
       }
     },
