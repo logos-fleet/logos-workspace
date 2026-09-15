@@ -9311,17 +9311,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789477478,
-        "narHash": "sha256-+J+bjPSSvgiizDHqYV/rBfRwwvrF/vQm13Gss426KQM=",
+        "lastModified": 1789500550,
+        "narHash": "sha256-UQEcszc+P4jx28pQhg7p99QRPQd815sLJrNBdCt+fTg=",
         "owner": "logos-fleet",
         "repo": "logos-evm-uniswap-module",
-        "rev": "ff4c2647e22c37970e3b6433f9e54d91ea35d552",
+        "rev": "5c9bdf94cab8ed8573d88499ed7351eb633b512b",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-uniswap-module",
-        "rev": "ff4c2647e22c37970e3b6433f9e54d91ea35d552",
+        "rev": "5c9bdf94cab8ed8573d88499ed7351eb633b512b",
         "type": "github"
       }
     },
