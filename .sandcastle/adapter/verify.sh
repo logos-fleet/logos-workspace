@@ -13,6 +13,11 @@
 #     this script refuses instead of reporting a meaningless result: push, run pin.sh, commit, and
 #     verify the pin with a clean tree. FLEET_NO_PATH_OVERRIDE overrides the list.
 #
+#  3. An override is a `git+file:` flake ref, which hashes TRACKED content only. An UNTRACKED
+#     file is invisible to the build: a new test file that was never `git add`ed does not get
+#     compiled, the suite passes without it, and the run reports PASS for code it never saw.
+#     So this refuses while a named repo has untracked, non-ignored files.
+#
 # A checkout that lags its pin (e.g. after a monorepo merge without `git submodule update`) is
 # left alone: overriding with it would test older code.
 # VERIFY_DRY_RUN=1 prints the ws command instead of running it.
@@ -27,6 +32,18 @@ ahead=()
 for repo in "$@"; do
   dir="$ROOT/repos/$repo"
   head=$(git -C "$dir" rev-parse HEAD 2>/dev/null) || continue
+  untracked=$(git -C "$dir" ls-files --others --exclude-standard)
+  if [[ -n "$untracked" ]]; then
+    cat >&2 <<MSG
+verify.sh: refusing to run — $repo has untracked files, which the build cannot see:
+$(echo "$untracked" | sed 's/^/    /' | head -20)
+  An override is a git+file: ref and hashes tracked content only, so these files would be
+  absent from the build and the run would report a result for code it never compiled. Add
+  them first (content need not be staged):
+    git -C repos/$repo add -N <file>...        # or commit them
+MSG
+    exit 4
+  fi
   pinned=$(git -C "$ROOT" ls-files -s "repos/$repo" | awk '{print $2}')
   [[ -n "$pinned" && "$head" != "$pinned" ]] || continue
   git -C "$dir" merge-base --is-ancestor "$pinned" "$head" 2>/dev/null || continue
