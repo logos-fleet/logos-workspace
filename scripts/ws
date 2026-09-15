@@ -321,6 +321,33 @@ get_all_flake_repos() {
   echo "${repos[@]}"
 }
 
+# Flake ref for a local override.
+#
+# `git+file:` hashes TRACKED content only, so the same commit checked out in two worktrees
+# yields ONE store path and one build serves both. `path:` copies the directory verbatim --
+# including the `.git` pointer file, whose text names the worktree -- so two worktrees at the
+# same commit with identical sources hash differently and every agent rebuilds the whole
+# chain for itself. Measured on 2026-09-15: 74 logos-basecamp builds in 36h, 83 GB of local
+# build output, most of it the same code built once per worktree.
+#
+# The cost: nix does not see UNTRACKED files. `git add -N` (intent-to-add, no content staged)
+# is enough to make one visible; .sandcastle/adapter/verify.sh refuses a run when an
+# overridden repo has untracked files, so this fails loudly instead of testing without them.
+# A SHALLOW clone keeps `path:`: a git input must supply revCount, and a shallow repo
+# cannot -- "error: '<repo>' is a shallow Git repository, so 'revCount' is not available"
+# aborts the whole evaluation. The fleet worktrees clone in full and get the shared store
+# path; the main checkout's 72 submodules are shallow and keep today's behaviour until
+# someone unshallows them.
+override_ref() {
+  local dir="$1"
+  if git -C "$dir" rev-parse --git-dir >/dev/null 2>&1 &&
+     [[ "$(git -C "$dir" rev-parse --is-shallow-repository 2>/dev/null)" != true ]]; then
+    echo "git+file://$dir"
+  else
+    echo "path:$dir"
+  fi
+}
+
 # Build --override-input flags for dirty repos
 build_override_flags() {
   local flags=()
@@ -331,7 +358,7 @@ build_override_flags() {
     input_name=$(get_input_name "$dir_name")
     repo_path=$(get_repo_path "$dir_name")
     if [[ -n "$input_name" ]]; then
-      flags+=("--override-input" "$input_name" "path:$REPOS_DIR/$repo_path")
+      flags+=("--override-input" "$input_name" "$(override_ref "$REPOS_DIR/$repo_path")")
     fi
   done
   echo "${flags[@]}"

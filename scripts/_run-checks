@@ -6,15 +6,22 @@
 # Builds every named check in ONE `nix build`: one flake evaluation instead of
 # one per check, and independent checks build in parallel under max-jobs.
 # --keep-going lets the others finish when one fails. A check PASSes when its
-# output path is VALID in the Nix store afterwards (read back with a single
-# `nix eval`). Existence is not enough: on darwin a builder that wrote $out and
-# then failed can leave that directory behind unregistered, and `-e` on it
-# reported a failed basecamp integration-test as PASS (2026-09-11, #67).
+# output path is VALID in the Nix store afterwards. Existence is not enough: on
+# darwin a builder that wrote $out and then failed can leave that directory
+# behind unregistered, and `-e` on it reported a failed basecamp
+# integration-test as PASS (2026-09-11, #67).
 #
-# A check that fails to *evaluate* aborts a multi-installable `nix build`
-# before anything builds, and fails the out-path eval too. Then the checks are
-# built one at a time instead, so one broken check cannot hide the verdicts of
-# the rest.
+# The out paths come from the BUILD (`--print-out-paths`), which prints one path
+# per installable, in order, for free. Reading them back with a second `nix eval`
+# instantiates every check all over again: for logos-basecamp's 19 checks that
+# measured 111 s and 10.0 GB peak RSS on an IDLE machine (2026-09-15), and four
+# agents each holding ~10 GB of evaluator is what pushes the venue into swap.
+#
+# nix prints nothing and exits non-zero when ANY installable fails or fails to
+# evaluate, so that case falls back to the eval, which yields a path per check
+# and lets each be judged on its own. If that eval fails too -- a check that
+# cannot evaluate aborts it -- the checks are built one at a time instead, so one
+# broken check cannot hide the verdicts of the rest.
 #
 # Prints one PASS/FAIL line per check and returns non-zero if any failed.
 # Needs run_nix_test, log and the colour variables from scripts/ws.
@@ -31,28 +38,36 @@ run_checks_batched() {
     names+=" \"${prefix}${check}\""
   done
 
+  local paths have_paths=true
   # shellcheck disable=SC2086
-  run_nix_test build --extra-experimental-features "nix-command flakes" \
-    --keep-going --no-link "${refs[@]}" $override_flags -L || true
+  paths=$(run_nix_test build --extra-experimental-features "nix-command flakes" \
+    --keep-going --no-link --print-out-paths "${refs[@]}" $override_flags -L) || have_paths=false
 
-  local paths
-  # shellcheck disable=SC2086
-  if ! paths=$(nix eval --extra-experimental-features "nix-command flakes" --raw \
-      "${flake}#checks.${system}" $override_flags \
-      --apply "cs: builtins.concatStringsSep \"\\n\" (map (n: cs.\${n}.outPath) [${names} ])" \
-      2>/dev/null); then
-    for check in "${checks[@]}"; do
-      # shellcheck disable=SC2086
-      if run_nix_test build --extra-experimental-features "nix-command flakes" \
-        --no-link "${check_ref}${check}" $override_flags -L; then
-        echo -e "  ${GREEN}PASS${NC} ${label} $check"
-      else
-        echo -e "  ${RED}FAIL${NC} ${label} $check"
-        all_pass=false
-      fi
-    done
-    $all_pass
-    return
+  # One line per installable is what makes the zip below sound. A multi-output
+  # check would print several, so count before trusting the alignment.
+  if $have_paths && [[ $(grep -c . <<< "$paths") -ne ${#checks[@]} ]]; then
+    have_paths=false
+  fi
+
+  if ! $have_paths; then
+    # shellcheck disable=SC2086
+    if ! paths=$(nix eval --extra-experimental-features "nix-command flakes" --raw \
+        "${flake}#checks.${system}" $override_flags \
+        --apply "cs: builtins.concatStringsSep \"\\n\" (map (n: cs.\${n}.outPath) [${names} ])" \
+        2>/dev/null); then
+      for check in "${checks[@]}"; do
+        # shellcheck disable=SC2086
+        if run_nix_test build --extra-experimental-features "nix-command flakes" \
+          --no-link "${check_ref}${check}" $override_flags -L; then
+          echo -e "  ${GREEN}PASS${NC} ${label} $check"
+        else
+          echo -e "  ${RED}FAIL${NC} ${label} $check"
+          all_pass=false
+        fi
+      done
+      $all_pass
+      return
+    fi
   fi
 
   while IFS= read -r path; do
