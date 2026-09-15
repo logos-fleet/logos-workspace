@@ -934,6 +934,9 @@
         "logos-evm-keystore-module": [
           "logos-evm-keystore-module"
         ],
+        "logos-evm-uniswap-module": [
+          "logos-evm-uniswap-module"
+        ],
         "logos-evm-wallet-ui": [
           "logos-evm-wallet-ui"
         ],
@@ -1000,17 +1003,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789477833,
-        "narHash": "sha256-NzXqDTOLZZYQgYWEvLqcqml/3/elmLD5cRUJspRXYrI=",
+        "lastModified": 1789482399,
+        "narHash": "sha256-Sh/mesm5/HVqa0c5qXmcVgCseyM9MuNQ9I9qFrwS+Jo=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "d9b6b32fba9426f59db9747743673c9b174fc491",
+        "rev": "78bcc8ceb77376ab8d0bf8d12385e4af35dbac0d",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "d9b6b32fba9426f59db9747743673c9b174fc491",
+        "rev": "78bcc8ceb77376ab8d0bf8d12385e4af35dbac0d",
         "type": "github"
       }
     },
