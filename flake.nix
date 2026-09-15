@@ -398,13 +398,13 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-railgun-module = {
-      url = "github:logos-fleet/logos-evm-railgun-module/44ec398725691b94f5a67b0dc8a175738d01fdc3";
+      url = "github:logos-fleet/logos-evm-railgun-module/bb51ec2208efc5292d590b09c9a3fcb39a18480a";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
       inputs.keystore_module.follows = "logos-evm-keystore-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-wallet-backend-module = {
-      url = "github:logos-fleet/logos-evm-wallet-backend-module/2ead095398171de3c0ccb27c31bbc2675e682f03";
+      url = "github:logos-fleet/logos-evm-wallet-backend-module/47ff0c446bee94f0be070493424c2651ca54b39e";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
       inputs.keystore_module.follows = "logos-evm-keystore-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
