@@ -17884,17 +17884,17 @@
         "rust-overlay": "rust-overlay_15"
       },
       "locked": {
-        "lastModified": 1789484349,
-        "narHash": "sha256-H6G2Qk60/HBkRsgWMfsbTV0VBpSwxc8FTG3ePH2VgVM=",
+        "lastModified": 1789492502,
+        "narHash": "sha256-0zMCTY1M6216EQJ+nWPiiNdkfRoppm18JoxJtxXpqzE=",
         "owner": "logos-fleet",
         "repo": "logos-module-builder",
-        "rev": "aa5e5d36e9c6c9c4e77f545113d260631fe5ce1f",
+        "rev": "44317e505c4001b7e0432b7096e9ada476d91dc3",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-module-builder",
-        "rev": "aa5e5d36e9c6c9c4e77f545113d260631fe5ce1f",
+        "rev": "44317e505c4001b7e0432b7096e9ada476d91dc3",
         "type": "github"
       }
     },
@@ -64652,17 +64652,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789484349,
-        "narHash": "sha256-8WXzCY8CAw1q4ikfcv57FPQ1ifl8zwLH03QuhL1dHoM=",
+        "lastModified": 1789492472,
+        "narHash": "sha256-tX2u7qAe/9kr8ttk7XZLR3SP+oo7EC4JC/A9N4l/wtE=",
         "owner": "logos-fleet",
         "repo": "logos-protocol",
-        "rev": "6d7637d77dfa255137b462ee43d34337708eaf20",
+        "rev": "c71d94f62979e10de065a7d5158c31002e844562",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-protocol",
-        "rev": "6d7637d77dfa255137b462ee43d34337708eaf20",
+        "rev": "c71d94f62979e10de065a7d5158c31002e844562",
         "type": "github"
       }
     },
@@ -68822,17 +68822,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789289775,
-        "narHash": "sha256-El7e1ejahHmnASYz5I7+/39rMD5zgdEQ4/vhFUTWsak=",
+        "lastModified": 1789492488,
+        "narHash": "sha256-5QttY2yOGBpt3yC19sp2t6ROn1U9QXmesDUOzPjaxYk=",
         "owner": "logos-fleet",
         "repo": "logos-rust-sdk",
-        "rev": "661d43431f4bd13ab50869e305e1eaba49579e8a",
+        "rev": "d6cd008d7efed61d609973d8b02808416ac792d2",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-rust-sdk",
-        "rev": "661d43431f4bd13ab50869e305e1eaba49579e8a",
+        "rev": "d6cd008d7efed61d609973d8b02808416ac792d2",
         "type": "github"
       }
     },
