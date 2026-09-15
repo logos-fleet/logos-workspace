@@ -380,7 +380,7 @@
     };
     logos-evm-net-proxy.url = "github:logos-fleet/logos-evm-net-proxy/564a730551b677ff8292144c3773a46d99a18b91";
     logos-evm-keystore-module = {
-      url = "github:logos-fleet/logos-evm-keystore-module/6ebc37c529f93de1795c71dc186e58603f1961d4";
+      url = "github:logos-fleet/logos-evm-keystore-module/9c95eb377dda25c5d89cb3b717d9abface3bd7ae";
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-eth-rpc-module = {
