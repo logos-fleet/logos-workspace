@@ -2630,12 +2630,23 @@ get_manual_follows() {
 # per repo.  Emitted into the flake.nix input block after the follows lines.
 get_manual_url_overrides() {
   case "$1" in
-    # logos-libp2p-module pins its `libp2p` input to the upstream
+    # logos-libp2p-module used to pin its `libp2p` input to the upstream
     # `feat/cbind/xpr-decode` branch, which was deleted — so re-locking it
-    # 422s on branch resolution.  Pin to the exact SHA that branch last pointed
-    # at (never merged to master) until the module pins the SHA itself.
+    # 422d on branch resolution and the SHA that branch last pointed at was
+    # pinned here instead.  The module has since moved to `nim-libp2p/master`
+    # and its own lock names c7bed9b, whose cbind emits the `nimffi_str` /
+    # `LibP2PSeq_Str` surface src/utils.h compiles against.  The old SHA
+    # predates that surface, so leaving it here is not a stale-but-harmless
+    # pin: the plugin fails to compile with 14 "use of undeclared identifier"
+    # errors.  It only ever appeared on a RELOCK, because the workspace lock
+    # still carried the module's own rev — which is why this survived a while.
+    #
+    # Still an explicit SHA rather than nothing: dropping the override would
+    # relock `master` to whatever it is today, which is a different (and
+    # unannounced) bump every time anyone pins a repo.  Track the module's own
+    # lock; the day it pins a SHA itself, this can go.
     logos-libp2p-module)
-      printf 'libp2p\tgithub:vacp2p/nim-libp2p/7c73484cc0c57a5f649dd3d277cef1c7c4de28f0\n' ;;
+      printf 'libp2p\tgithub:vacp2p/nim-libp2p/c7bed9bef76e33b43dd64b92e8d74ca0d6bce175\n' ;;
   esac
 }
 
