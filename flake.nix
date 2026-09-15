@@ -404,7 +404,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-wallet-backend-module = {
-      url = "github:logos-fleet/logos-evm-wallet-backend-module/562380aa50155a785ca3fd8c97d4af5765c9c5f2";
+      url = "github:logos-fleet/logos-evm-wallet-backend-module/b09e29daa6146c678f999244fb302ffa872b6dd1";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
       inputs.keystore_module.follows = "logos-evm-keystore-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
