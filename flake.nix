@@ -37,7 +37,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-qt-sdk = {
-      url = "github:logos-fleet/logos-qt-sdk/45b092fd246b68319d46eefd8cc13d189ef1c945";
+      url = "github:logos-fleet/logos-qt-sdk/613e295ddaef06e5a0eea429a4bbb24cf360844a";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-nix.follows = "logos-nix";
       inputs.logos-plugin-qt.follows = "logos-plugin-qt";
