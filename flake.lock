@@ -10593,17 +10593,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789545618,
-        "narHash": "sha256-3ASWEbuh0JfOG4Fl7xLDaylOew/yG+7khzbuVwzhKww=",
+        "lastModified": 1789545903,
+        "narHash": "sha256-6vX6+/abzdweDMdymJs5yF76wx+HBc7JHh7Cy/cs++0=",
         "owner": "logos-fleet",
         "repo": "logos-libp2p-module",
-        "rev": "2b65eee613e1e1407061e8bc3983769b9d545c99",
+        "rev": "36ee3c27371a7afb549f6b9d612c699153513c28",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-libp2p-module",
-        "rev": "2b65eee613e1e1407061e8bc3983769b9d545c99",
+        "rev": "36ee3c27371a7afb549f6b9d612c699153513c28",
         "type": "github"
       }
     },
