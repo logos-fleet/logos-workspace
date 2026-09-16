@@ -990,17 +990,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789566527,
-        "narHash": "sha256-WEUjM7lSR0WP5Vki/LOnCZdjO/+x0g+GzcmAQzqkECs=",
+        "lastModified": 1789576647,
+        "narHash": "sha256-88u86uPUfUX1XIOWp00+ATvaUohuCQ3Hedjh58mByH8=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "1098c5bee6d17aecd076271579378283ec4e3ef1",
+        "rev": "893e22d8898e481db521b69a78ddddcdc5769ea7",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "1098c5bee6d17aecd076271579378283ec4e3ef1",
+        "rev": "893e22d8898e481db521b69a78ddddcdc5769ea7",
         "type": "github"
       }
     },
@@ -10593,17 +10593,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789548507,
-        "narHash": "sha256-zmCuKJF8icTGI3uUnYt8ghPaIy/WKgqhAHEhOHNNqeM=",
+        "lastModified": 1789571084,
+        "narHash": "sha256-2iXMgnf6cy4wNUV3ceYF4LSF4DYhK+rnYM1x65soYH0=",
         "owner": "logos-fleet",
         "repo": "logos-libp2p-module",
-        "rev": "d6e6a1da7fb3e6164d43296de19962efb3be7e8d",
+        "rev": "65896b02d01bef9f7c47fe6dff7a1c97d3f0b520",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-libp2p-module",
-        "rev": "d6e6a1da7fb3e6164d43296de19962efb3be7e8d",
+        "rev": "65896b02d01bef9f7c47fe6dff7a1c97d3f0b520",
         "type": "github"
       }
     },
@@ -67642,17 +67642,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789490919,
-        "narHash": "sha256-mtD5mX0fNh56a6UZrtdjkOhObd8/d1Pl1xbi0tZYdIk=",
+        "lastModified": 1789575960,
+        "narHash": "sha256-lXQDuUsiYb6nXxYGZu8hw1RSOUMwqKa8afh7BdUN/w8=",
         "owner": "logos-fleet",
         "repo": "logos-qt-sdk",
-        "rev": "dfcebef390d4a3c7aea5a172286424f0e77a331b",
+        "rev": "613e295ddaef06e5a0eea429a4bbb24cf360844a",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-qt-sdk",
-        "rev": "dfcebef390d4a3c7aea5a172286424f0e77a331b",
+        "rev": "613e295ddaef06e5a0eea429a4bbb24cf360844a",
         "type": "github"
       }
     },

@@ -37,7 +37,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-qt-sdk = {
-      url = "github:logos-fleet/logos-qt-sdk/dfcebef390d4a3c7aea5a172286424f0e77a331b";
+      url = "github:logos-fleet/logos-qt-sdk/613e295ddaef06e5a0eea429a4bbb24cf360844a";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-nix.follows = "logos-nix";
       inputs.logos-plugin-qt.follows = "logos-plugin-qt";
@@ -174,7 +174,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/1098c5bee6d17aecd076271579378283ec4e3ef1";
+      url = "github:logos-fleet/logos-basecamp/893e22d8898e481db521b69a78ddddcdc5769ea7";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
@@ -315,7 +315,7 @@
       inputs.nix-bundle-lgx.follows = "nix-bundle-lgx";
     };
     logos-libp2p-module = {
-      url = "github:logos-fleet/logos-libp2p-module/d6e6a1da7fb3e6164d43296de19962efb3be7e8d";
+      url = "github:logos-fleet/logos-libp2p-module/65896b02d01bef9f7c47fe6dff7a1c97d3f0b520";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.logoscore-cli.follows = "logos-logoscore-cli";
       inputs.package-manager.follows = "logos-package-manager";
