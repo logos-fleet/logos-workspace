@@ -121,7 +121,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-module-builder = {
-      url = "github:logos-fleet/logos-module-builder/9da0cbc02de1c6a04ad16d776db0cc841678d711";
+      url = "github:logos-fleet/logos-module-builder/738f1a6ef5a6f755f8433297ac0d2ef54bba8d2f";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-design-system.follows = "logos-design-system";
       inputs.logos-module.follows = "logos-module";
@@ -174,7 +174,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/a636e7a45d22232ba5862bb912a0f44a59defd58";
+      url = "github:logos-fleet/logos-basecamp/4bb43e10ddc17ce5207cb84a4c6121464c475e1e";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
@@ -182,10 +182,12 @@
       inputs.logos-delivery-module.follows = "logos-delivery-module";
       inputs.logos-design-system.follows = "logos-design-system";
       inputs.logos-evm-eth-rpc-module.follows = "logos-evm-eth-rpc-module";
+      inputs.logos-evm-fee-module.follows = "logos-evm-fee-module";
       inputs.logos-evm-keystore-module.follows = "logos-evm-keystore-module";
       inputs.logos-evm-railgun-module.follows = "logos-evm-railgun-module";
       inputs.logos-evm-token-list-module.follows = "logos-evm-token-list-module";
       inputs.logos-evm-uniswap-module.follows = "logos-evm-uniswap-module";
+      inputs.logos-evm-wallet-backend-module.follows = "logos-evm-wallet-backend-module";
       inputs.logos-evm-wallet-ui.follows = "logos-evm-wallet-ui";
       inputs.logos-liblogos.follows = "logos-liblogos";
       inputs.logos-libp2p-module.follows = "logos-libp2p-module";
@@ -389,6 +391,11 @@
       url = "github:logos-fleet/logos-evm-eth-rpc-module/3e925c93542450c5bf4a93fad24ae1bdd6559269";
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
+    logos-evm-fee-module = {
+      url = "github:logos-fleet/logos-evm-fee-module/c87c963330bf206a0d2dfdc5d3e39c0a7201d6a9";
+      inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
+      inputs.logos-module-builder.follows = "logos-module-builder";
+    };
     logos-evm-token-list-module = {
       url = "github:logos-fleet/logos-evm-token-list-module/c3c63f7e31c21004d202d7176c8e70554209d924";
       inputs.logos-module-builder.follows = "logos-module-builder";
@@ -405,8 +412,9 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-wallet-backend-module = {
-      url = "github:logos-fleet/logos-evm-wallet-backend-module/0fe192cae480cbf4f923556a627cdaa5a3a42dfc";
+      url = "github:logos-fleet/logos-evm-wallet-backend-module/9c13ae2b02a37dae5f99cdbca6d11f76f1a9b950";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
+      inputs.fee_module.follows = "logos-evm-fee-module";
       inputs.keystore_module.follows = "logos-evm-keystore-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.token_list_module.follows = "logos-evm-token-list-module";
