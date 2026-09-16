@@ -283,7 +283,7 @@
       inputs.wallet_module.follows = "logos-wallet-module";
     };
     logos-delivery-module = {
-      url = "github:logos-fleet/logos-delivery-module/df7f21301dd0fb0ed865b35eb617ff3808e40af5";
+      url = "github:logos-fleet/logos-delivery-module/abfc35dba4d1b7738a121904e5bb627f810552c3";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.nix-bundle-lgx.follows = "nix-bundle-lgx";
     };
