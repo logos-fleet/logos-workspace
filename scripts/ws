@@ -1347,16 +1347,16 @@ _json_array_to_lines() {
   echo "$1" | tr -d '[]"' | tr ',' '\n' | sed '/^$/d'
 }
 
-# Discover checks and test-like packages via nix eval.
+# Nix fragment: from a list of attribute names, keep only the test-looking ones.
+KEEP_TEST_NAMES='builtins.filter (n: builtins.match ".*[Tt]est.*" n != null)'
+
+# True when a discovery result names neither a check nor a test package.
+_no_test_outputs() {
+  [[ "$1" == *'"checks":[]'* && "$1" == *'"testPkgs":[]'* ]]
+}
+
+# Discover a repo's checks and test-like packages under the WORKSPACE flake.
 #
-# ASK THE FLAKE THAT WILL BUILD. When overrides are active the build goes
-# through the WORKSPACE flake (see _test_one_repo below), because only its
-# `follows` carry an --override-input down to a TRANSITIVE dep; an override
-# aimed at `path:repos/<x>` reaches that repo's direct inputs and stops there.
-# Discovering against the sub-repo instead can miss an output that exists only
-# under the workspace closure: the check is never run and the repo reports
-# green. That is the class of bug logos-workspace#91 was — a `web`-variant
-# check gated on a fixture one set of pins supplies and another does not.
 # The workspace flake forwards EVERY repo's outputs, each prefixed with
 # `<input>--` (a repo's `default` package keeps the bare repo name). Keep this
 # repo's prefixed names and strip the prefix, so what is handed back is the
@@ -1364,7 +1364,6 @@ _json_array_to_lines() {
 # other repo's outputs, `default` included, drop out.
 _discover_in_workspace_flake() {
   local system="$1" input_name="$2" override_flags="${3:-}"
-  local keep_test_names='builtins.filter (n: builtins.match ".*[Tt]est.*" n != null)'
   local own_names='ns:
     let p = "'"${input_name}"'--"; l = builtins.stringLength p; in
     map (n: builtins.substring l (-1) n)
@@ -1380,21 +1379,28 @@ _discover_in_workspace_flake() {
   # shellcheck disable=SC2086
   test_pkgs_json=$(nix eval --extra-experimental-features "nix-command flakes" \
     --json "${WORKSPACE_ROOT}#packages.${system}" \
-    --apply "ps: $keep_test_names (($own_names) ps)" \
+    --apply "ps: $KEEP_TEST_NAMES (($own_names) ps)" \
     $override_flags 2>/dev/null) || test_pkgs_json='[]'
 
   echo "{\"checks\":${checks_json},\"testPkgs\":${test_pkgs_json}}"
 }
 
+# Discover checks and test-like packages via nix eval.
+#
+# ASK THE FLAKE THAT WILL BUILD. When overrides are active the build goes
+# through the WORKSPACE flake (see _test_one_repo below), because only its
+# `follows` carry an --override-input down to a TRANSITIVE dep; an override
+# aimed at `path:repos/<x>` reaches that repo's direct inputs and stops there.
+# Discovering against the sub-repo instead can miss an output that exists only
+# under the workspace closure: the check is never run and the repo reports
+# green. That is the class of bug logos-workspace#91 was — a `web`-variant
+# check gated on a fixture one set of pins supplies and another does not.
 _discover_test_outputs() {
   local repo_path="$1"
   local system="$2"
   local override_flags="${3:-}"
   local input_name="${4:-}"
   local use_workspace_flake="${5:-false}"
-
-  # Nix fragment, shared by all three branches: keep only test-looking names.
-  local keep_test_names='builtins.filter (n: builtins.match ".*[Tt]est.*" n != null)'
 
   if [[ "$use_workspace_flake" == "true" && -n "$input_name" ]]; then
     _discover_in_workspace_flake "$system" "$input_name" "$override_flags"
@@ -1412,7 +1418,7 @@ _discover_test_outputs() {
     # shellcheck disable=SC2086
     test_pkgs_json=$(nix eval --extra-experimental-features "nix-command flakes" \
       --json "path:${repo_path}#packages.${system}" \
-      --apply "ps: $keep_test_names (builtins.attrNames ps)" \
+      --apply "ps: $KEEP_TEST_NAMES (builtins.attrNames ps)" \
       $override_flags 2>/dev/null) || test_pkgs_json='[]'
 
     echo "{\"checks\":${checks_json},\"testPkgs\":${test_pkgs_json}}"
@@ -1425,7 +1431,7 @@ _discover_test_outputs() {
           flake = builtins.getFlake "path:'"$repo_path"'";
           checks = builtins.attrNames (flake.checks.'"$system"' or {});
           packages = builtins.attrNames (flake.packages.'"$system"' or {});
-          testPkgs = '"$keep_test_names"' packages;
+          testPkgs = '"$KEEP_TEST_NAMES"' packages;
         in builtins.toJSON { inherit checks testPkgs; }
       ' 2>/dev/null) || own='{"checks":[],"testPkgs":[]}'
 
@@ -1441,11 +1447,12 @@ _discover_test_outputs() {
     # Only when the repo answers with NOTHING, so a repo that has its own
     # checks keeps running exactly those, from its own flake, as before. A repo
     # with no checks anywhere finds none here either and still skips.
-    if [[ -n "$input_name" ]] \
-       && [[ "$own" == *'"checks":[]'* ]] && [[ "$own" == *'"testPkgs":[]'* ]]; then
+    if [[ -n "$input_name" ]] && _no_test_outputs "$own"; then
       local via
       via=$(_discover_in_workspace_flake "$system" "$input_name")
-      if [[ "$via" != *'"checks":[]'*'"testPkgs":[]'* ]]; then
+      if ! _no_test_outputs "$via"; then
+        # Re-emit with a marker (drop the closing brace, add a field) so
+        # _test_one_repo builds these from the workspace flake too.
         echo "${via%\}},\"viaWorkspace\":true}"
         return 0
       fi
@@ -1494,10 +1501,6 @@ _test_one_repo() {
   checks_json=$(echo "$outputs" | sed 's/.*"checks":\(\[[^]]*\]\).*/\1/')
   test_pkgs_json=$(echo "$outputs" | sed 's/.*"testPkgs":\(\[[^]]*\]\).*/\1/')
 
-  # Build the flake ref for checks and packages.
-  # When overrides are active (--local, --auto-local, --workspace), build from the
-  # workspace flake so that follows declarations propagate overrides to transitive deps.
-  # Without overrides, build from the individual repo flake (matches standalone nix flake check).
   # Discovery may have found this repo's checks only under the workspace closure
   # (see _discover_test_outputs); build them from where they were found.
   if [[ "$outputs" == *'"viaWorkspace":true'* ]]; then
@@ -1505,6 +1508,10 @@ _test_one_repo() {
     use_workspace_flake=true
   fi
 
+  # Build the flake ref for checks and packages.
+  # When overrides are active (--local, --auto-local, --workspace), build from the
+  # workspace flake so that follows declarations propagate overrides to transitive deps.
+  # Without overrides, build from the individual repo flake (matches standalone nix flake check).
   local check_ref pkg_ref
   if [[ "$use_workspace_flake" == "true" ]]; then
     # Workspace flake prefixes check names: checks.<system>.<input_name>--<check>
