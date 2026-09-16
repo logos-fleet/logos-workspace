@@ -392,7 +392,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-fee-module = {
-      url = "github:logos-fleet/logos-evm-fee-module/045f87c313e5ec37adf31732506b971aeed70546";
+      url = "github:logos-fleet/logos-evm-fee-module/c87c963330bf206a0d2dfdc5d3e39c0a7201d6a9";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
     };

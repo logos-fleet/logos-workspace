@@ -9207,17 +9207,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789531033,
-        "narHash": "sha256-4Xb/7Vq/XQEu1AdEtp4c/ZNtNWMGKMSr4oGlK82apCY=",
+        "lastModified": 1789534958,
+        "narHash": "sha256-9MsgEaaL0Pyf9Z/bt3fszKWhm/auDJ2uV7nzqWIItrs=",
         "owner": "logos-fleet",
         "repo": "logos-evm-fee-module",
-        "rev": "045f87c313e5ec37adf31732506b971aeed70546",
+        "rev": "c87c963330bf206a0d2dfdc5d3e39c0a7201d6a9",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-fee-module",
-        "rev": "045f87c313e5ec37adf31732506b971aeed70546",
+        "rev": "c87c963330bf206a0d2dfdc5d3e39c0a7201d6a9",
         "type": "github"
       }
     },
