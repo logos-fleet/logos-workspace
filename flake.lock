@@ -17883,7 +17883,9 @@
           "logos-standalone-app"
         ],
         "logos-test-framework": "logos-test-framework_14",
-        "logos-view-module": "logos-view-module_11",
+        "logos-view-module": [
+          "logos-view-module"
+        ],
         "logos-view-module-runtime": [
           "logos-view-module-runtime"
         ],
@@ -17897,17 +17899,17 @@
         "rust-overlay": "rust-overlay_15"
       },
       "locked": {
-        "lastModified": 1789531478,
-        "narHash": "sha256-Jc1v8cyfUaDC1Qo8D/Tx5Z+3xpr76RkWtnMElq0aRBQ=",
+        "lastModified": 1789582168,
+        "narHash": "sha256-pWhrn3ltwHLWRiELgwsMD0sKQbX2gXoDH7Zt4k6Jils=",
         "owner": "logos-fleet",
         "repo": "logos-module-builder",
-        "rev": "738f1a6ef5a6f755f8433297ac0d2ef54bba8d2f",
+        "rev": "902367114fb87f335566e71d75e6791de08f61de",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-module-builder",
-        "rev": "738f1a6ef5a6f755f8433297ac0d2ef54bba8d2f",
+        "rev": "902367114fb87f335566e71d75e6791de08f61de",
         "type": "github"
       }
     },
@@ -18414,7 +18416,7 @@
         "logos-rust-sdk": "logos-rust-sdk_12",
         "logos-standalone-app": "logos-standalone-app_21",
         "logos-test-framework": "logos-test-framework_30",
-        "logos-view-module": "logos-view-module_15",
+        "logos-view-module": "logos-view-module_14",
         "logos-view-module-runtime": "logos-view-module-runtime_29",
         "nix-bundle-lgx": "nix-bundle-lgx_78",
         "nix-bundle-logos-module-install": "nix-bundle-logos-module-install_35",
@@ -18459,7 +18461,7 @@
           "logos-capability-module"
         ],
         "logos-test-framework": "logos-test-framework_27",
-        "logos-view-module": "logos-view-module_12",
+        "logos-view-module": "logos-view-module_11",
         "logos-view-module-runtime": "logos-view-module-runtime_26",
         "nix-bundle-lgx": "nix-bundle-lgx_72",
         "nix-bundle-logos-module-install": "nix-bundle-logos-module-install_32",
@@ -18502,7 +18504,7 @@
         "logos-rust-sdk": "logos-rust-sdk_14",
         "logos-standalone-app": "logos-standalone-app_22",
         "logos-test-framework": "logos-test-framework_29",
-        "logos-view-module": "logos-view-module_14",
+        "logos-view-module": "logos-view-module_13",
         "logos-view-module-runtime": "logos-view-module-runtime_28",
         "nix-bundle-lgx": "nix-bundle-lgx_76",
         "nix-bundle-logos-module-install": "nix-bundle-logos-module-install_34",
@@ -18598,7 +18600,7 @@
           "logos-capability-module"
         ],
         "logos-test-framework": "logos-test-framework_28",
-        "logos-view-module": "logos-view-module_13",
+        "logos-view-module": "logos-view-module_12",
         "logos-view-module-runtime": "logos-view-module-runtime_27",
         "nix-bundle-lgx": "nix-bundle-lgx_74",
         "nix-bundle-logos-module-install": "nix-bundle-logos-module-install_33",
@@ -72920,10 +72922,20 @@
     "logos-view-module_11": {
       "inputs": {
         "logos-nix": [
+          "logos-rust-sdk",
+          "logos-module-builder",
+          "logos-standalone-app",
+          "logos-liblogos",
+          "logos-capability-module",
           "logos-module-builder",
           "logos-nix"
         ],
         "nixpkgs": [
+          "logos-rust-sdk",
+          "logos-module-builder",
+          "logos-standalone-app",
+          "logos-liblogos",
+          "logos-capability-module",
           "logos-module-builder",
           "logos-view-module",
           "logos-nix",
@@ -72945,43 +72957,6 @@
       }
     },
     "logos-view-module_12": {
-      "inputs": {
-        "logos-nix": [
-          "logos-rust-sdk",
-          "logos-module-builder",
-          "logos-standalone-app",
-          "logos-liblogos",
-          "logos-capability-module",
-          "logos-module-builder",
-          "logos-nix"
-        ],
-        "nixpkgs": [
-          "logos-rust-sdk",
-          "logos-module-builder",
-          "logos-standalone-app",
-          "logos-liblogos",
-          "logos-capability-module",
-          "logos-module-builder",
-          "logos-view-module",
-          "logos-nix",
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1787441236,
-        "narHash": "sha256-dDbws6OlaOw5YTCHQfVLXqF+ssD6Fs3vCrLqOthEYOI=",
-        "owner": "logos-co",
-        "repo": "logos-view-module",
-        "rev": "d6c8885494524504cc5ea9dcfdad54a98ed26ea4",
-        "type": "github"
-      },
-      "original": {
-        "owner": "logos-co",
-        "repo": "logos-view-module",
-        "type": "github"
-      }
-    },
-    "logos-view-module_13": {
       "inputs": {
         "logos-nix": [
           "logos-rust-sdk",
@@ -73026,7 +73001,7 @@
         "type": "github"
       }
     },
-    "logos-view-module_14": {
+    "logos-view-module_13": {
       "inputs": {
         "logos-nix": [
           "logos-rust-sdk",
@@ -73063,7 +73038,7 @@
         "type": "github"
       }
     },
-    "logos-view-module_15": {
+    "logos-view-module_14": {
       "inputs": {
         "logos-nix": [
           "logos-rust-sdk",
@@ -73089,6 +73064,30 @@
       "original": {
         "owner": "logos-co",
         "repo": "logos-view-module",
+        "type": "github"
+      }
+    },
+    "logos-view-module_15": {
+      "inputs": {
+        "logos-nix": [
+          "logos-nix"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789583492,
+        "narHash": "sha256-NBR3O3IJRrYMa8XDB6CjKxEvTw9ZEcaaOntG6DTqmBY=",
+        "owner": "logos-fleet",
+        "repo": "logos-view-module",
+        "rev": "675b8679a2126aedfeba8940885e995807defc13",
+        "type": "github"
+      },
+      "original": {
+        "owner": "logos-fleet",
+        "repo": "logos-view-module",
+        "rev": "675b8679a2126aedfeba8940885e995807defc13",
         "type": "github"
       }
     },
@@ -118556,6 +118555,7 @@
         "logos-storage-module": "logos-storage-module",
         "logos-storage-ui": "logos-storage-ui",
         "logos-test-modules": "logos-test-modules_3",
+        "logos-view-module": "logos-view-module_15",
         "logos-view-module-runtime": "logos-view-module-runtime_30",
         "logos-wallet-module": "logos-wallet-module",
         "logos-wallet-ui": "logos-wallet-ui",
