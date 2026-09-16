@@ -990,17 +990,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789557958,
-        "narHash": "sha256-ij+IXQK6VzlVLwH/vJXojkz7e5r9bYAKhwQLcatI5jw=",
+        "lastModified": 1789566527,
+        "narHash": "sha256-WEUjM7lSR0WP5Vki/LOnCZdjO/+x0g+GzcmAQzqkECs=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "d25e3146d0924d514ff7434a03ec02fd5264ca7c",
+        "rev": "1098c5bee6d17aecd076271579378283ec4e3ef1",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "d25e3146d0924d514ff7434a03ec02fd5264ca7c",
+        "rev": "1098c5bee6d17aecd076271579378283ec4e3ef1",
         "type": "github"
       }
     },
@@ -2520,17 +2520,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789553855,
-        "narHash": "sha256-ku4X1ii16zIyFV3SJ/1BSJTPFXh0Sdirx3wlhZPhRz8=",
+        "lastModified": 1789564257,
+        "narHash": "sha256-Pgg8E8PuzTSo0z1uip5C9zVZz0C9WBpm1YZfhXqklfU=",
         "owner": "logos-fleet",
         "repo": "logos-chat-ui",
-        "rev": "6fc02740424e7203281ae884b06de52b45095fe9",
+        "rev": "ce186fd738d32f9a7d0b27dfbc28ef75c15a1f0e",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-chat-ui",
-        "rev": "6fc02740424e7203281ae884b06de52b45095fe9",
+        "rev": "ce186fd738d32f9a7d0b27dfbc28ef75c15a1f0e",
         "type": "github"
       }
     },
@@ -9274,17 +9274,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789557162,
-        "narHash": "sha256-KLrvhGjYYkKsm/5zZQhg+BnW626gBGgM3lda1F0RheE=",
+        "lastModified": 1789567004,
+        "narHash": "sha256-Wd6X8ODnMfbJomEBy3vDDxmRvhGGrA0oAeiz3VUBLmk=",
         "owner": "logos-fleet",
         "repo": "logos-evm-railgun-module",
-        "rev": "6d8e1e47383cf757b1e4cf036cb6b0f1610111a9",
+        "rev": "059ac4d72ed70e34b81315b49e42c0c7119736ce",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-railgun-module",
-        "rev": "6d8e1e47383cf757b1e4cf036cb6b0f1610111a9",
+        "rev": "059ac4d72ed70e34b81315b49e42c0c7119736ce",
         "type": "github"
       }
     },
