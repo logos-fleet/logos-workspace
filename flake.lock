@@ -1013,17 +1013,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789536646,
-        "narHash": "sha256-A2QX/fuYMZlsbcaV50GPewRmJKrqJE/zr3Ui6RubF7U=",
+        "lastModified": 1789539271,
+        "narHash": "sha256-HLNlURBSrQZvqQI09wB/DQGybvrnddVGoJvvJndm4U0=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "ea81ea76fccc4e4f3c885ea938e5722685e90658",
+        "rev": "8a4985aef93f0c2424c7604bd1fd528e2ebcf6ea",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "ea81ea76fccc4e4f3c885ea938e5722685e90658",
+        "rev": "8a4985aef93f0c2424c7604bd1fd528e2ebcf6ea",
         "type": "github"
       }
     },
