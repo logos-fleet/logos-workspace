@@ -990,17 +990,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789546713,
-        "narHash": "sha256-Zp8A2KQtAsFKITQu071v68W06Y+wJBrcYOfTG307jZQ=",
+        "lastModified": 1789554518,
+        "narHash": "sha256-rRCI9qt/FUhUdH2RGKFJTIlj7mc493IgTAPh/sfZQ4c=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "3c0f924a75929d43322deea862d9c48ad9674c60",
+        "rev": "cbdbd42fae77b433dc3d62b79712fdb07c88f056",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "3c0f924a75929d43322deea862d9c48ad9674c60",
+        "rev": "cbdbd42fae77b433dc3d62b79712fdb07c88f056",
         "type": "github"
       }
     },
@@ -9183,17 +9183,17 @@
         "verified_proxy_module": "verified_proxy_module"
       },
       "locked": {
-        "lastModified": 1789479042,
-        "narHash": "sha256-UYFkuL2BpFPHIZUcKNA5w5afIi4tGNQs4cdla3gc1jU=",
+        "lastModified": 1789547843,
+        "narHash": "sha256-tq5MiAfUwJby/gJwR6x5YeNRyxTldfesYZOePiDRsRc=",
         "owner": "logos-fleet",
         "repo": "logos-evm-eth-rpc-module",
-        "rev": "3e925c93542450c5bf4a93fad24ae1bdd6559269",
+        "rev": "2329a38b9573c4196d1a6c0a1e88390c109587ae",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-eth-rpc-module",
-        "rev": "3e925c93542450c5bf4a93fad24ae1bdd6559269",
+        "rev": "2329a38b9573c4196d1a6c0a1e88390c109587ae",
         "type": "github"
       }
     },
@@ -10593,17 +10593,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789479056,
-        "narHash": "sha256-f4g1QX6+RRqrJZt0+SAOIxzlRZSv3SbC2mf7sTT7YrU=",
+        "lastModified": 1789548507,
+        "narHash": "sha256-zmCuKJF8icTGI3uUnYt8ghPaIy/WKgqhAHEhOHNNqeM=",
         "owner": "logos-fleet",
         "repo": "logos-libp2p-module",
-        "rev": "3e64b15530ba3c77ca375414e5820ee2878adb9a",
+        "rev": "d6e6a1da7fb3e6164d43296de19962efb3be7e8d",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-libp2p-module",
-        "rev": "3e64b15530ba3c77ca375414e5820ee2878adb9a",
+        "rev": "d6e6a1da7fb3e6164d43296de19962efb3be7e8d",
         "type": "github"
       }
     },

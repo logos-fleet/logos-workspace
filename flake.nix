@@ -174,7 +174,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/3c0f924a75929d43322deea862d9c48ad9674c60";
+      url = "github:logos-fleet/logos-basecamp/cbdbd42fae77b433dc3d62b79712fdb07c88f056";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
@@ -315,7 +315,7 @@
       inputs.nix-bundle-lgx.follows = "nix-bundle-lgx";
     };
     logos-libp2p-module = {
-      url = "github:logos-fleet/logos-libp2p-module/3e64b15530ba3c77ca375414e5820ee2878adb9a";
+      url = "github:logos-fleet/logos-libp2p-module/d6e6a1da7fb3e6164d43296de19962efb3be7e8d";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.logoscore-cli.follows = "logos-logoscore-cli";
       inputs.package-manager.follows = "logos-package-manager";
@@ -388,7 +388,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-eth-rpc-module = {
-      url = "github:logos-fleet/logos-evm-eth-rpc-module/3e925c93542450c5bf4a93fad24ae1bdd6559269";
+      url = "github:logos-fleet/logos-evm-eth-rpc-module/2329a38b9573c4196d1a6c0a1e88390c109587ae";
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-fee-module = {
