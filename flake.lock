@@ -8225,17 +8225,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789479056,
-        "narHash": "sha256-T3bTMbP346OhqtShKriowr0EVbKvmiPLo3uefYPZ8Qc=",
+        "lastModified": 1789563789,
+        "narHash": "sha256-Q7ftRwQeP6BaD6Gr4k2TN/XNvDRUQHJEQzBw+66JuAY=",
         "owner": "logos-fleet",
         "repo": "logos-delivery-module",
-        "rev": "581e9c084924d247098826621ec9031e436d578b",
+        "rev": "a411f7afad1793c28b69dca281c096374ab0839e",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-delivery-module",
-        "rev": "581e9c084924d247098826621ec9031e436d578b",
+        "rev": "a411f7afad1793c28b69dca281c096374ab0839e",
         "type": "github"
       }
     },
@@ -9295,17 +9295,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789489320,
-        "narHash": "sha256-xN6Ov/JMq3U4gnr7NwBtd4xXoxfnwT7/jNa4fn36Ucc=",
+        "lastModified": 1789562412,
+        "narHash": "sha256-L0Rx9iuHxcG9gJ5hR4Y6qwIX/3gf1FTHRg8Cx/5bfbo=",
         "owner": "logos-fleet",
         "repo": "logos-evm-token-list-module",
-        "rev": "c3c63f7e31c21004d202d7176c8e70554209d924",
+        "rev": "0517e9ead88433cfc840d7b179f2bb3dd5237d62",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-token-list-module",
-        "rev": "c3c63f7e31c21004d202d7176c8e70554209d924",
+        "rev": "0517e9ead88433cfc840d7b179f2bb3dd5237d62",
         "type": "github"
       }
     },
