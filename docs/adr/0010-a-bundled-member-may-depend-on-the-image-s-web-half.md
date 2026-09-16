@@ -59,10 +59,36 @@ ordinary module-to-module call, not a new mechanism.
   fixtures; no catalog member can legitimately depend on one. Keeping them out
   also keeps `packages.<ios-system>.bundled-set` evaluable on a Mac, which is the
   attribute `ws build --target ios-sim-arm64` uses from one.
-- **Unverified: native → `web` has never been driven on a handset.** The proven
-  directions are `web` → native and `web` → `web`. The architecture says the
-  call is ordinary (above), and the closure change is what makes a build that
-  could test it exist at all, but the measurement is still owed.
+- **MEASURED: native → `web` works on a handset (#196).** This was recorded as
+  unverified when the decision was taken — the proven directions were `web` →
+  native and `web` → `web`, and the argument for this one was architectural.
+  Driven on the venue's physical iPad Air (4th generation), iOS 26.5.2, with
+  `railgun_module` (native, Bare, in-process) calling the image's `web`
+  `keystore_module` (a page, 1.09 MB wasm, `idbfs`) through the module's own
+  `web_dependency_probe()`:
+
+  - **It answers.** Three ordinary crossings — `caller_identity`,
+    `list_accounts`, `caller_identity` — all returned: 25 ms, 1 ms, 1 ms. The
+    first carries the capability handshake; a crossing costs nothing after that.
+  - **The page names the caller correctly.** `kind: "module"`, `identity:
+    "railgun_module"`. The `web` → `web` defect of #129 (a page answering its own
+    name to every caller) does not recur in this direction. The contrast is in
+    the same run: the Shell's own `--call keystore_module.caller_identity()`
+    answers `kind: "host"`, so the page really is distinguishing callers.
+  - **Nothing blocks.** `railgun_module` declares `concurrency: "single"`, and
+    the dispatch still ran on a thread other than the one the image was loaded
+    on (`dispatchLeftTheLoadThread: true`) — `BareModuleGlue`'s worker, not the
+    Qt main thread the page answers on.
+  - **The ordering takes care of itself.** The core loads the closure
+    topologically and the Web container's `awaitLoad` waits for the page to
+    serve, so the `web` dependency was up before the native member existed:
+    `Module loaded: keystore_module` at 07:52:17.758, `railgun_module` at
+    07:52:17.789. A Bundled member calling "too early" does not arise on this
+    path.
+
+  Not measured on Android: `railgun_module` has no working `aarch64-android`
+  Bare build (`wasmer`'s `wasmi` bindgen, see #196's follow-up), which is a
+  property of that crate rather than of this decision.
 
 ## Considered options
 
@@ -93,4 +119,5 @@ ordinary module-to-module call, not a new mechanism.
 Accepted. Implemented in `logos-basecamp` `nix/bundled-set.nix` (`resolveSet`,
 `webSatisfied` in `bundled-set.json`) and `flake.nix` (`mobileWebModulesFor`,
 `mobileWebAssetsFor`'s `alsoShip`), with `railgun_module` as the first catalog
-member whose closure it closes. See logos-workspace#183.
+member whose closure it closes. See logos-workspace#183, and #196 for the
+device measurement the decision was taken without.
