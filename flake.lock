@@ -67642,17 +67642,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789490919,
-        "narHash": "sha256-mtD5mX0fNh56a6UZrtdjkOhObd8/d1Pl1xbi0tZYdIk=",
+        "lastModified": 1789570149,
+        "narHash": "sha256-F6DjregNyZLPbaaoQKn4bLFEjUw35D5ZtHNwByP4up8=",
         "owner": "logos-fleet",
         "repo": "logos-qt-sdk",
-        "rev": "dfcebef390d4a3c7aea5a172286424f0e77a331b",
+        "rev": "8020df4b93454985566736351a3537569a05d979",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-qt-sdk",
-        "rev": "dfcebef390d4a3c7aea5a172286424f0e77a331b",
+        "rev": "8020df4b93454985566736351a3537569a05d979",
         "type": "github"
       }
     },
