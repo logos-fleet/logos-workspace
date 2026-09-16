@@ -315,7 +315,7 @@
       inputs.nix-bundle-lgx.follows = "nix-bundle-lgx";
     };
     logos-libp2p-module = {
-      url = "github:logos-fleet/logos-libp2p-module/d6e6a1da7fb3e6164d43296de19962efb3be7e8d";
+      url = "github:logos-fleet/logos-libp2p-module/65896b02d01bef9f7c47fe6dff7a1c97d3f0b520";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.logoscore-cli.follows = "logos-logoscore-cli";
       inputs.package-manager.follows = "logos-package-manager";
@@ -406,7 +406,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-railgun-module = {
-      url = "github:logos-fleet/logos-evm-railgun-module/6d8e1e47383cf757b1e4cf036cb6b0f1610111a9";
+      url = "github:logos-fleet/logos-evm-railgun-module/059ac4d72ed70e34b81315b49e42c0c7119736ce";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
       inputs.keystore_module.follows = "logos-evm-keystore-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
