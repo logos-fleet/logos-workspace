@@ -399,7 +399,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-railgun-module = {
-      url = "github:logos-fleet/logos-evm-railgun-module/ba40584bf39cd26ab19d229054acd5037754ac52";
+      url = "github:logos-fleet/logos-evm-railgun-module/501f8f9b46e7e8ed7901677ed9503334d4c30fb7";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
       inputs.keystore_module.follows = "logos-evm-keystore-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
