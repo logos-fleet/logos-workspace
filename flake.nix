@@ -283,7 +283,7 @@
       inputs.wallet_module.follows = "logos-wallet-module";
     };
     logos-delivery-module = {
-      url = "github:logos-fleet/logos-delivery-module/581e9c084924d247098826621ec9031e436d578b";
+      url = "github:logos-fleet/logos-delivery-module/fcc42fbb46052a4d08dc70acc07f5bff063791bf";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.nix-bundle-lgx.follows = "nix-bundle-lgx";
     };
@@ -397,7 +397,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-token-list-module = {
-      url = "github:logos-fleet/logos-evm-token-list-module/c3c63f7e31c21004d202d7176c8e70554209d924";
+      url = "github:logos-fleet/logos-evm-token-list-module/88dcc6f5b6db96f903bd9b933eeb4f20cb208018";
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-uniswap-module = {
