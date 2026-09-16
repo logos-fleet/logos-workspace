@@ -315,7 +315,7 @@
       inputs.nix-bundle-lgx.follows = "nix-bundle-lgx";
     };
     logos-libp2p-module = {
-      url = "github:logos-fleet/logos-libp2p-module/4879a21183bd8b11936bf3498ce7ec1865038a46";
+      url = "github:logos-fleet/logos-libp2p-module/65896b02d01bef9f7c47fe6dff7a1c97d3f0b520";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.logoscore-cli.follows = "logos-logoscore-cli";
       inputs.package-manager.follows = "logos-package-manager";
