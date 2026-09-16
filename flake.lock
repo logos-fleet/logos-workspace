@@ -931,14 +931,21 @@
         "logos-evm-eth-rpc-module": [
           "logos-evm-eth-rpc-module"
         ],
+        "logos-evm-fee-module": "logos-evm-fee-module",
         "logos-evm-keystore-module": [
           "logos-evm-keystore-module"
+        ],
+        "logos-evm-railgun-module": [
+          "logos-evm-railgun-module"
         ],
         "logos-evm-token-list-module": [
           "logos-evm-token-list-module"
         ],
         "logos-evm-uniswap-module": [
           "logos-evm-uniswap-module"
+        ],
+        "logos-evm-wallet-backend-module": [
+          "logos-evm-wallet-backend-module"
         ],
         "logos-evm-wallet-ui": [
           "logos-evm-wallet-ui"
@@ -1006,17 +1013,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789509169,
-        "narHash": "sha256-2eGwUP0pJUTAvMqzzzZ1MmxwlAk9CgOLBskIaLikw20=",
+        "lastModified": 1789536646,
+        "narHash": "sha256-A2QX/fuYMZlsbcaV50GPewRmJKrqJE/zr3Ui6RubF7U=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "c136f441286a90296c48fc71a5dfc208322f87e6",
+        "rev": "ea81ea76fccc4e4f3c885ea938e5722685e90658",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "c136f441286a90296c48fc71a5dfc208322f87e6",
+        "rev": "ea81ea76fccc4e4f3c885ea938e5722685e90658",
         "type": "github"
       }
     },
@@ -9210,6 +9217,31 @@
         "owner": "logos-fleet",
         "repo": "logos-evm-eth-rpc-module",
         "rev": "3e925c93542450c5bf4a93fad24ae1bdd6559269",
+        "type": "github"
+      }
+    },
+    "logos-evm-fee-module": {
+      "inputs": {
+        "eth_rpc_module": [
+          "logos-basecamp",
+          "logos-evm-eth-rpc-module"
+        ],
+        "logos-module-builder": [
+          "logos-basecamp",
+          "logos-module-builder"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789531033,
+        "narHash": "sha256-4Xb/7Vq/XQEu1AdEtp4c/ZNtNWMGKMSr4oGlK82apCY=",
+        "owner": "logos-fleet",
+        "repo": "logos-evm-fee-module",
+        "rev": "045f87c313e5ec37adf31732506b971aeed70546",
+        "type": "github"
+      },
+      "original": {
+        "owner": "logos-co",
+        "repo": "logos-evm-fee-module",
         "type": "github"
       }
     },
