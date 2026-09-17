@@ -427,7 +427,7 @@
       inputs.uniswap_module.follows = "logos-evm-uniswap-module";
     };
     logos-evm-wallet-ui = {
-      url = "github:logos-fleet/logos-evm-wallet-ui/7754be11eb9c8963fe92450c4830e09ec9b4e9a1";
+      url = "github:logos-fleet/logos-evm-wallet-ui/a2582f23ff008a9212acf194ad4c56e4e896b7a0";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.wallet_backend_module.follows = "logos-evm-wallet-backend-module";
     };
