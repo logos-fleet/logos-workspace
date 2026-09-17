@@ -990,17 +990,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789587000,
-        "narHash": "sha256-HZ10p99sLkP5H8EjndvwbL8ot7t47ruRRLmvPBWhiF8=",
+        "lastModified": 1789613317,
+        "narHash": "sha256-morX401jH15B2XX006x/wn/A11enCPpf+GXyqR61Rxk=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "3f24321fef7e46db13a8bcde4c8a526dd23143e5",
+        "rev": "a98fcdea41a1305986824c9b6c86db08d3ab4c03",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "3f24321fef7e46db13a8bcde4c8a526dd23143e5",
+        "rev": "a98fcdea41a1305986824c9b6c86db08d3ab4c03",
         "type": "github"
       }
     },
@@ -9274,17 +9274,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789604425,
-        "narHash": "sha256-O9W5w9a+/de+8t/vPBdvoxF3usy7PL3496vS57pNv9E=",
+        "lastModified": 1789613310,
+        "narHash": "sha256-VwaPPMJc9I1Gnv85Fi76Xcq4pVAjGqUD/tbikrvT9Oc=",
         "owner": "logos-fleet",
         "repo": "logos-evm-railgun-module",
-        "rev": "2b0b2d89e0c058f6f3167f53a3e9638577617e31",
+        "rev": "1426d3dc46e278f8e5a58b7ff652a029a3d5caa1",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-railgun-module",
-        "rev": "2b0b2d89e0c058f6f3167f53a3e9638577617e31",
+        "rev": "1426d3dc46e278f8e5a58b7ff652a029a3d5caa1",
         "type": "github"
       }
     },
