@@ -990,17 +990,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789613317,
-        "narHash": "sha256-morX401jH15B2XX006x/wn/A11enCPpf+GXyqR61Rxk=",
+        "lastModified": 1789624990,
+        "narHash": "sha256-1ePn86EuCnns8jphYn3cYLABokBXz0IljLnhUQ3e9ck=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "a98fcdea41a1305986824c9b6c86db08d3ab4c03",
+        "rev": "60d7db9213b778799737282b062f9744b94eb780",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "a98fcdea41a1305986824c9b6c86db08d3ab4c03",
+        "rev": "60d7db9213b778799737282b062f9744b94eb780",
         "type": "github"
       }
     },
@@ -9399,17 +9399,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789619414,
-        "narHash": "sha256-UzxnW46EpGwXbzAIg6mtxADV3+OFx1oj3stg8s/6Dp0=",
+        "lastModified": 1789631053,
+        "narHash": "sha256-nXMUVkicvXx35EHruWll5Nzm2z090jgMG0HSs8Hx3tg=",
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "a2582f23ff008a9212acf194ad4c56e4e896b7a0",
+        "rev": "65fd213d69319bedf2dade0eb7309c106c084c87",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "a2582f23ff008a9212acf194ad4c56e4e896b7a0",
+        "rev": "65fd213d69319bedf2dade0eb7309c106c084c87",
         "type": "github"
       }
     },
