@@ -180,7 +180,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/0ca191b8b1e0ec4c0c5299f405e697d1e9d3974f";
+      url = "github:logos-fleet/logos-basecamp/39a3b2573c2be45bcd281057aed90625919f5156";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
@@ -428,7 +428,7 @@
       inputs.uniswap_module.follows = "logos-evm-uniswap-module";
     };
     logos-evm-wallet-ui = {
-      url = "github:logos-fleet/logos-evm-wallet-ui/355b26c292ac3b65af9adbdfc291e292390718ef";
+      url = "github:logos-fleet/logos-evm-wallet-ui/d616b884fa53a666c5ded2e22527c5b2ce277669";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.wallet_backend_module.follows = "logos-evm-wallet-backend-module";
     };
