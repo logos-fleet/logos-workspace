@@ -180,7 +180,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     logos-basecamp = {
-      url = "github:logos-fleet/logos-basecamp/2605943a0a3bcb3018cd2f008523bff1c598f0d9";
+      url = "github:logos-fleet/logos-basecamp/0ca191b8b1e0ec4c0c5299f405e697d1e9d3974f";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-chat-module.follows = "logos-chat-module";
       inputs.logos-chat-ui.follows = "logos-chat-ui";
@@ -191,6 +191,7 @@
       inputs.logos-evm-fee-module.follows = "logos-evm-fee-module";
       inputs.logos-evm-keystore-module.follows = "logos-evm-keystore-module";
       inputs.logos-evm-railgun-module.follows = "logos-evm-railgun-module";
+      inputs.logos-evm-signer-cli.follows = "logos-evm-signer-cli";
       inputs.logos-evm-token-list-module.follows = "logos-evm-token-list-module";
       inputs.logos-evm-uniswap-module.follows = "logos-evm-uniswap-module";
       inputs.logos-evm-wallet-backend-module.follows = "logos-evm-wallet-backend-module";
@@ -412,7 +413,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-evm-railgun-module = {
-      url = "github:logos-fleet/logos-evm-railgun-module/e253604385c7db8f281b042cb9d8efbb153791bf";
+      url = "github:logos-fleet/logos-evm-railgun-module/d7b433a1b28fbb8f6ad025843ddeb0911510c565";
       inputs.eth_rpc_module.follows = "logos-evm-eth-rpc-module";
       inputs.keystore_module.follows = "logos-evm-keystore-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
@@ -427,9 +428,15 @@
       inputs.uniswap_module.follows = "logos-evm-uniswap-module";
     };
     logos-evm-wallet-ui = {
-      url = "github:logos-fleet/logos-evm-wallet-ui/f30bb81c52ab0aebe8270c4c9ad5553190c28dad";
+      url = "github:logos-fleet/logos-evm-wallet-ui/4e624b5cc4cbcabed528109422bffef25f95b0cf";
       inputs.logos-module-builder.follows = "logos-module-builder";
       inputs.wallet_backend_module.follows = "logos-evm-wallet-backend-module";
+    };
+    logos-evm-signer-cli = {
+      url = "github:logos-fleet/logos-evm-signer-cli/042ae0abca9cdfbe5f90f00a538b3ded26c4de94";
+      inputs.keystore_module.follows = "logos-evm-keystore-module";
+      inputs.logos-module-builder.follows = "logos-module-builder";
+      inputs.token_list_module.follows = "logos-evm-token-list-module";
     };
     # END AUTO-INPUTS
   };

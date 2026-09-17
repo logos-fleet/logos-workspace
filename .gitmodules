@@ -220,3 +220,6 @@
 [submodule "repos/logos-view-module"]
 	path = repos/logos-view-module
 	url = https://github.com/logos-fleet/logos-view-module.git
+[submodule "repos/logos-evm-signer-cli"]
+	path = repos/logos-evm-signer-cli
+	url = https://github.com/logos-fleet/logos-evm-signer-cli.git
