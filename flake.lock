@@ -990,17 +990,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789640840,
-        "narHash": "sha256-HOvMdsGyIqP1mc+8WB5j4GbPcwhtsJpVDG41f8VFHRE=",
+        "lastModified": 1789643572,
+        "narHash": "sha256-XrMMS8/8EVg4QVAZOeChrpD1mMs+6/jia4KId9y3mZc=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "3eaebe0f1b3530056478aecfb8868ca17282cdbf",
+        "rev": "f7856a39d9fa8351c8f59d9334a56f82ca491623",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "3eaebe0f1b3530056478aecfb8868ca17282cdbf",
+        "rev": "f7856a39d9fa8351c8f59d9334a56f82ca491623",
         "type": "github"
       }
     },
@@ -9274,17 +9274,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789626107,
-        "narHash": "sha256-mGiZMvF/Q45/OksJO2DPrRK/w/7eFVDzyHF8r0pq4b0=",
+        "lastModified": 1789632659,
+        "narHash": "sha256-/MTZ+Gu3uu/hpO+mqqgo9L0NaPEM12xY4nOElwQjApc=",
         "owner": "logos-fleet",
         "repo": "logos-evm-railgun-module",
-        "rev": "49df007c81fe6010c65f8176cb72aaa9d0018cb0",
+        "rev": "e253604385c7db8f281b042cb9d8efbb153791bf",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-railgun-module",
-        "rev": "49df007c81fe6010c65f8176cb72aaa9d0018cb0",
+        "rev": "e253604385c7db8f281b042cb9d8efbb153791bf",
         "type": "github"
       }
     },
@@ -9399,17 +9399,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789631053,
-        "narHash": "sha256-nXMUVkicvXx35EHruWll5Nzm2z090jgMG0HSs8Hx3tg=",
+        "lastModified": 1789641220,
+        "narHash": "sha256-On8c5SzKpwr7leyb3WF1XseeTpkk3CiU4M5PQYv3YEw=",
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "65fd213d69319bedf2dade0eb7309c106c084c87",
+        "rev": "f30bb81c52ab0aebe8270c4c9ad5553190c28dad",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "65fd213d69319bedf2dade0eb7309c106c084c87",
+        "rev": "f30bb81c52ab0aebe8270c4c9ad5553190c28dad",
         "type": "github"
       }
     },
