@@ -231,7 +231,7 @@
       inputs.logos-module-builder.follows = "logos-module-builder";
     };
     logos-chat-ui = {
-      url = "github:logos-fleet/logos-chat-ui/cf1568cf0a73b96bc246712a5ad8ae923f284229";
+      url = "github:logos-fleet/logos-chat-ui/f398f4a78c35bfd6760efa77d57f570784c8d61e";
       inputs.chat_module.follows = "logos-chat-module";
       inputs.logos-delivery-module.follows = "logos-delivery-module";
       inputs.logos-design-system.follows = "logos-design-system";
