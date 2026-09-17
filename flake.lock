@@ -915,6 +915,9 @@
         "logos-evm-railgun-module": [
           "logos-evm-railgun-module"
         ],
+        "logos-evm-signer-cli": [
+          "logos-evm-signer-cli"
+        ],
         "logos-evm-token-list-module": [
           "logos-evm-token-list-module"
         ],
@@ -990,17 +993,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789643572,
-        "narHash": "sha256-yQyZV6Wpp0qmyBLE7eC0i3EuCfwHvQrl1q4pnWMOXm0=",
+        "lastModified": 1789659291,
+        "narHash": "sha256-vKDezO1oQ5aAqRFvmQdw3qe+izS9PJnSphmLYmzQIJc=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "f7856a39d9fa8351c8f59d9334a56f82ca491623",
+        "rev": "0ca191b8b1e0ec4c0c5299f405e697d1e9d3974f",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "f7856a39d9fa8351c8f59d9334a56f82ca491623",
+        "rev": "0ca191b8b1e0ec4c0c5299f405e697d1e9d3974f",
         "type": "github"
       }
     },
@@ -9288,6 +9291,33 @@
         "type": "github"
       }
     },
+    "logos-evm-signer-cli": {
+      "inputs": {
+        "keystore_module": [
+          "logos-evm-keystore-module"
+        ],
+        "logos-module-builder": [
+          "logos-module-builder"
+        ],
+        "token_list_module": [
+          "logos-evm-token-list-module"
+        ]
+      },
+      "locked": {
+        "lastModified": 1789643010,
+        "narHash": "sha256-Q6VAJ0zCtTHGm5TtZtICdcbt31sDBvBfKBMXzNflw70=",
+        "owner": "logos-fleet",
+        "repo": "logos-evm-signer-cli",
+        "rev": "042ae0abca9cdfbe5f90f00a538b3ded26c4de94",
+        "type": "github"
+      },
+      "original": {
+        "owner": "logos-fleet",
+        "repo": "logos-evm-signer-cli",
+        "rev": "042ae0abca9cdfbe5f90f00a538b3ded26c4de94",
+        "type": "github"
+      }
+    },
     "logos-evm-token-list-module": {
       "inputs": {
         "logos-module-builder": [
@@ -9399,17 +9429,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789659879,
-        "narHash": "sha256-q4EgZ3QPTQgb33J114zv02ueRPcUW/gWtliUWgv5yoM=",
+        "lastModified": 1789662176,
+        "narHash": "sha256-TpS2kDLNHS9spxfVawWAC3QeizD/PpoJlLyC3un0Vhk=",
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "1328a8f60a5007d00e42799e28e441dec661e9a4",
+        "rev": "355b26c292ac3b65af9adbdfc291e292390718ef",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "1328a8f60a5007d00e42799e28e441dec661e9a4",
+        "rev": "355b26c292ac3b65af9adbdfc291e292390718ef",
         "type": "github"
       }
     },
@@ -118524,6 +118554,7 @@
         "logos-evm-keystore-module": "logos-evm-keystore-module",
         "logos-evm-net-proxy": "logos-evm-net-proxy",
         "logos-evm-railgun-module": "logos-evm-railgun-module",
+        "logos-evm-signer-cli": "logos-evm-signer-cli",
         "logos-evm-token-list-module": "logos-evm-token-list-module",
         "logos-evm-uniswap-module": "logos-evm-uniswap-module",
         "logos-evm-wallet-backend-module": "logos-evm-wallet-backend-module",
