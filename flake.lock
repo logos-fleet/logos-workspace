@@ -990,17 +990,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789643572,
-        "narHash": "sha256-XrMMS8/8EVg4QVAZOeChrpD1mMs+6/jia4KId9y3mZc=",
+        "lastModified": 1789649113,
+        "narHash": "sha256-RUoDjcaPCYhfow33qTgb5G/2kcWLDPewXAXG3unp9IQ=",
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "f7856a39d9fa8351c8f59d9334a56f82ca491623",
+        "rev": "57fc8a56546a1c92d9c196cf69ab50348fadd2a4",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-basecamp",
-        "rev": "f7856a39d9fa8351c8f59d9334a56f82ca491623",
+        "rev": "57fc8a56546a1c92d9c196cf69ab50348fadd2a4",
         "type": "github"
       }
     },
@@ -9399,17 +9399,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789641220,
-        "narHash": "sha256-On8c5SzKpwr7leyb3WF1XseeTpkk3CiU4M5PQYv3YEw=",
+        "lastModified": 1789649113,
+        "narHash": "sha256-AB9+WGbyNhoxnNTTFE2reQh9qikYAVHcEXjPeBQD8K0=",
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "f30bb81c52ab0aebe8270c4c9ad5553190c28dad",
+        "rev": "a41bf0e6e1b4da9e9d0721cfab6ea6d80eb3597d",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "f30bb81c52ab0aebe8270c4c9ad5553190c28dad",
+        "rev": "a41bf0e6e1b4da9e9d0721cfab6ea6d80eb3597d",
         "type": "github"
       }
     },
@@ -17899,17 +17899,17 @@
         "rust-overlay": "rust-overlay_15"
       },
       "locked": {
-        "lastModified": 1789582168,
-        "narHash": "sha256-pWhrn3ltwHLWRiELgwsMD0sKQbX2gXoDH7Zt4k6Jils=",
+        "lastModified": 1789649087,
+        "narHash": "sha256-yb2Jpx5yVqAovJk88O6TfUX+KTXmH7cPbTl4PdTIO7Y=",
         "owner": "logos-fleet",
         "repo": "logos-module-builder",
-        "rev": "902367114fb87f335566e71d75e6791de08f61de",
+        "rev": "c311835f519b94078f9ddc45e68d5f1ffde37dd9",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-module-builder",
-        "rev": "902367114fb87f335566e71d75e6791de08f61de",
+        "rev": "c311835f519b94078f9ddc45e68d5f1ffde37dd9",
         "type": "github"
       }
     },
