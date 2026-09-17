@@ -9399,17 +9399,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1789496779,
-        "narHash": "sha256-hZdCZQU1dYZjUs67ba40gaAHrTKNoe/qHbBCyU++lZ4=",
+        "lastModified": 1789616795,
+        "narHash": "sha256-DUKtjGIA/oNoz4esSUkM28bgIgPOKajVuX2g925oI5s=",
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "b44ad11a8de892362fc39f74c08f29c4eda5b5e7",
+        "rev": "c3a89392b3d6b080be89fcd0d24599487b435250",
         "type": "github"
       },
       "original": {
         "owner": "logos-fleet",
         "repo": "logos-evm-wallet-ui",
-        "rev": "b44ad11a8de892362fc39f74c08f29c4eda5b5e7",
+        "rev": "c3a89392b3d6b080be89fcd0d24599487b435250",
         "type": "github"
       }
     },
