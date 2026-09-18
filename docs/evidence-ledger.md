@@ -52,11 +52,14 @@ Four rules decide the hard cases:
 | No JIT; a JIT dies at the CALL | **MEASURED** | iPad Air 4, dated, staged: engine ok → compile ok → instantiate ok → call → signal 9. An interpreter did the same work in 817 ms. |
 | …"because W^X is enforced" | **INHERITED** | an explanation invented for a measured symptom. No `mprotect`/`MAP_JIT` error was ever observed. |
 | Android: `dlopen` from the app data dir is a W^X violation since API 29 | **MEASURED FALSE** | A real Bare module loaded *and executed* from the app's own `files/` on a Xiaomi (Android 15, API 35, targetSdk 36), in the `untrusted_app` domain verified to match the Shell's, with `r-xp` file-backed mappings in `/proc/maps` and no AVC denial. Android 10 removed `execve()` of a file in the app home (`execute_no_trans`), **not** `mmap(PROT_EXEC)` (`execute`) — the linker path was never closed. One device; not "Android". |
-| Google Play forbids downloading a `.so` | **MIS-STATED** | the rule is source-scoped — "from a source other than **Google Play**". A code comment dropped the qualifier and the blanket version propagated. Play Feature Delivery is not covered by that sentence. |
+| Google Play forbids downloading a `.so` | **MIS-STATED, and the conclusion is false** | The rule is source-scoped — "from a source other than **Google Play**" (quoted 2026-09-18; stable since 2021-10-15). A code comment dropped the qualifier. **Google documents `dlopen()` of a Play-delivered `.so`**: a Play Feature Delivery module's path is recovered via `ClassLoader.findLibrary()` and passed to `dlopen`. So post-install native modules are legal on Play when Play is the transport — 50 modules/device, 500 MB each, membership fixed at app release, no third-party publication. **iOS forbids the act; Play forbids the source** — they are not one constraint. |
 | Android needs an explicit `DT_NEEDED` on the protocol library | **IMPLEMENTED + MEASURED** | named handset, the obvious alternative (`RTLD_GLOBAL` re-open) actually attempted and its failure recorded verbatim, plus a gate that regresses. **This is the standard the rest should meet.** |
-| Exactly one protocol instance per process — registry and token manager | **MEASURED** | 31 refused calls against a baseline of 0 on Mach-O; nine `TokenManager` definers on PE. Gates carry negative controls that fail loudly if the check goes vacuous. |
-| …stretched to the transport node | **ASSERTED, counter-example measured** | two `LogosModeConfig` copies disagreed about mode and the run still completed in 16 ms. Degraded, not broken. |
+| Exactly one protocol instance per process — **token state only** | **MEASURED**, and reproducible in <1 s | Two `TokenManager::instance()` addresses; an authorized call refused with `ModuleProxy: rejecting unauthorized call`, with an anti-vacuity control. **`StoreRegistry` splits the same way and FAILS OPEN** — isolation declared in one image is silently not in effect in another, leaving that identity holding the ambient ring. Darwin/PE; ELF collapses duplicates and is untested. |
+| …stretched to the transport node | **MEASURED FALSE** | Three `QRemoteObjectHost` nodes bound the **same** URL in one process with no error; a client still connected. The factories are stateless, and `PluginRegistry` keeps its table on `QCoreApplication` properties — one per *process* regardless of code copies, i.e. duplication-immune by construction. `LogosModeConfig` is per-image but degrades rather than failing. **Our own symbol gate has always agreed**: it gates `TokenManager\|StoreRegistry\|LogosAPI\|LogosAPIClient` and no transport type. |
 | A Bare module leaves `lp_*` undefined, resolved upward | **IMPLEMENTED** | gate captures `nm -u` and fails with "has no undefined `lp_*` — it is not resolving upward". |
+
+| RFC 9266 `tls-exporter` is unreachable on mobile | **MEASURED FALSE** (API existence, verified in shipped headers) | `sec_protocol_metadata_create_secret_with_context` — iOS 12+, read from the shipped iOS 27.0 SDK header; `android.net.ssl.SSLSockets.exportKeyingMaterial` — API 31+, Conscrypt below. Secure Transport never had one (header grep). **No bundled TLS stack required.** Recorded here because this project published it as a hard blocker before checking. |
+| Ed25519 call-evidence keys can be hardware-backed on a phone | **MEASURED FALSE** | Secure Enclave is P-256 only; Curve 25519 is TEE-KeyMint-2+ on Android, **not** StrongBox. ECDSA P-256 client certs *are* first-class in TLS 1.3, so **transport identity is hardware-bindable everywhere while call-evidence identity is hardware-bindable nowhere on iOS.** |
 
 ## Web-container claims
 
@@ -64,7 +67,9 @@ Four rules decide the hard cases:
 |---|---|---|
 | The Web container is the only store-legal home for runtime-installed code on iOS | **ASSERTED, and contradicted by its own cited source** | the research it cites concludes the engine does **not** matter (the WebKit carve-out was removed June 2017), ranks downloaded QML *above* WKWebView for safety, and notes 2.5.2 is engine-agnostic. Nothing of ours has been through App Review. |
 | A wasm module cannot block | **IMPLEMENTED (enforced in the negative)** | the blocking shape does not link: `wasm-ld: error: undefined symbol: lp_client_create`. Deliberate, with the reason written at the time. One Worker, one event loop, no ASYNCIFY. |
-| No SharedArrayBuffer on Android WebView | **MEASURED** (one device, one WebView build) + **asserted as a universal** | SM-G990B, WebView 152.0.7977.64, 2026-09-09, plus an open upstream Chromium bug. A "never" resting on a single negative observation and someone else's unfixed ticket. The `https://appassets.androidplatform.net` asset-loader origin is a real secure origin and has never been tried with COOP/COEP — a different case from the custom scheme. |
+| No SharedArrayBuffer on Android WebView | **MEASURED TRUE — but the recorded reason was wrong** | Xiaomi, WebView 152.0.7977.64, 2026-09-18. Our origin was never the problem: `https://appassets.androidplatform.net` **is** a real secure context. **This WebView ignores COOP/COEP outright** — the headers demonstrably reach the renderer (`fetch(location.href).headers` shows `require-corp`), `crossOriginIsolated` stays false, and a cross-origin fetch that `require-corp` should block returns 200. A **same-device Chrome control does grant SAB**, localising the failure to the WebView embedding rather than the engine. So adding COOP/COEP to our page would buy nothing. One WebView build; "Android WebView in general" is still inference. |
+| "Single-threaded only" because SharedArrayBuffer is unavailable | **TRUE on Android, WRONG REASON; and it is not a mobile constraint** | Shared memory can be *created* on Android WebView but not *shared*: `postMessage` throws `DataCloneError: SharedArrayBuffer transfer requires self.crossOriginIsolated`, identically for the `WebAssembly.Memory` wrapper and the bare buffer — **one gate, not two** — so emscripten's `-pthread` cannot start. A same-device Chrome control passed all three steps (`Atomics.wait` → `ok` after 707 ms, three contexts sharing bytes), proving the harness can produce a positive and that `crossOriginIsolated` is the only variable. **No origin or header work can change it**, and **one flag is the whole switch** — re-probe on a WebView bump rather than calling it permanent. On iOS `crossOriginIsolated` IS reachable from loopback, so this is an **Android** constraint, not a mobile one. |
+| A `web` variant cannot open a WebSocket | **MEASURED FALSE** | From a dedicated Worker on the shipped Android origin with no COOP/COEP: `wss://echo.websocket.org` binary echo in 319 ms, local `ws://` in 38 ms, `typeof WebSocket` = `function`. External `fetch` also reaches an arbitrary https host subject to CORS (api.github.com, 200, 190 KB). Plain browser APIs — emscripten's `-lwebsocket.js` binding is still untested. |
 | iOS reaches `crossOriginIsolated` only via an in-app loopback listener | **MEASURED**, but the framing was wrong | device and simulator. **SharedArrayBuffer is available on iOS** — WebKit enabled it in Safari 15.2 ("Enabled SharedArrayBuffer support when COOP/COEP headers are used", STP 133, 2021-09-30). What denies it is **our own `logos://` origin**, not the platform: identical COOP/COEP headers gave `crossOriginIsolated=false` from `WKURLSchemeHandler` and `true` from `http://127.0.0.1` on the same device. This was repeatedly restated in this project as "no SharedArrayBuffer on iOS", which is false. |
 | `file://` is dead on both platforms | **MEASURED** | verbatim console output, two physical devices. A real negative, properly recorded. |
 | Qt's network layer refuses a custom scheme | **MEASURED**, mechanism named | QNAM's wasm backend serves `http`/`https`/relative only. **Nothing in CI watches this** — a Qt bump could quietly make the loopback listener unnecessary. |
@@ -168,6 +173,28 @@ cannot point at a measurement, a primary source, or a build that refuses.
    — a device in the install base without WebGL2 — every Downloaded module is dark there with
    no diagnostic.* Vendor documentation plus absence of evidence; every local observation is
    positive, which says nothing about what Qt does without it.
+
+## Claims this effort got wrong about itself
+
+Corrections made *after* the ledger existed, recorded because the pattern matters more than
+the items:
+
+- **"SharedArrayBuffer is unavailable on iOS."** Restated repeatedly in this effort as a
+  platform limit. It is available — WebKit enabled it in Safari 15.2 given COOP/COEP — and
+  what denies it is **our own `logos://` origin**. Our own measurement showed the identical
+  headers yielding `crossOriginIsolated=false` from the custom scheme and `true` from
+  loopback, on the same device.
+- **"RFC 9266's `tls-exporter` is a mobile blocker requiring a bundled TLS stack."** Published
+  in a resolution as the single hard blocker for remote modules. It is reachable through
+  platform TLS on both phones: `sec_protocol_metadata_create_secret` (iOS 12+, verified in the
+  shipped SDK header) and `android.net.ssl.SSLSockets.exportKeyingMaterial` (API 31+).
+- **"A `web` variant can do WebSocket networking today."** True on documented emscripten APIs,
+  but published with a confidence the evidence did not carry — nothing had been run in our
+  container. Downgraded to asserted-with-a-good-source pending measurement.
+
+All three were made by the author of this ledger, after writing it. The rubric catches what
+it is applied to; it does not apply itself. What actually caught these was someone asking
+"says who?" — twice a human, once a subagent instructed to grade its own claims.
 
 ## The bias worth noticing
 
