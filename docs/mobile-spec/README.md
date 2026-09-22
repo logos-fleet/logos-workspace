@@ -39,6 +39,11 @@ What turned out to be possible after all:
   reachable through platform TLS on both phones.
 - **A `web` variant can do real networking** — measured, over TLS, from a Worker. The real line
   is **listening versus dialing**, not "networking".
+- **One platform can host a module out-of-process after all** — an isolated process reached a
+  local endpoint over a descriptor-delivered socket and **executed a module delivered after
+  install**, giving it a per-module failure domain and a real identity boundary the other
+  platform cannot have. It had been recorded as unavailable because the only defined transport
+  profile is unusable there — **a profile gap, not a platform one**.
 
 What is genuinely closed is in [artifact 03](03-what-mobile-cannot-do.md), and it is a short
 list.

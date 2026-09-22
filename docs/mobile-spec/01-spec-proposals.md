@@ -152,6 +152,26 @@ one send in flight and **no priority lane**; a bounded outbound queue **with one
 for a terminal protocol error**; and the peer-verification substitute — endpoint unforgeability
 by construction plus Runtime-side origin, frame and world binding.
 
+**`§8.y` — a descriptor-delivered local profile** (proposed `logos.local.binder-fd`), for an
+out-of-process host on a platform where no address-based local socket is reachable. Measured:
+on one platform an isolated process cannot reach a filesystem socket (its data directory is not
+in that process's mount namespace) *or* an abstract one (denied by mandatory access control),
+while a socketpair whose descriptor is delivered by the platform's IPC mechanism works in both
+directions.
+
+The profile carries **no path and no address**; the endpoint is unforgeable by construction,
+since the descriptor can only have arrived through the platform channel. Its peer check is the
+**ancillary-credentials** mechanism, **not** the socket-level one — measured, the latter reports
+the *creating* process rather than the actual peer and therefore **cannot fail**, which the
+peer-verification rule above forbids. And the profile MUST state that attestation is
+**one-directional**: the host can verify the module, the module cannot verify the host, and must
+rest on the descriptor's provenance.
+
+A companion requirement belongs in `LOGOS-MODULE-LOADER`: where a hosted realization's execution
+envelope cannot map a file from the deployment's writable storage, the artifact MUST be delivered
+as an anonymous, **sealed** memory object mapped directly by descriptor, and MUST NOT be re-opened
+by path.
+
 **Canonicalisation boundary** — deterministic encoding and payload commitments apply to the
 **complete message octets after reassembly and after removal of the transfer encoding**.
 Chunking, transfer encoding and batching are **carriage**, not part of any canonical form.

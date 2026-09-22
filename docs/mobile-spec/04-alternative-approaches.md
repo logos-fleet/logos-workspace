@@ -17,17 +17,39 @@ seven candidates into four tiers plus one delivery variable.
 | 1 | **static, linked in** | yes | yes | no release, ever; the app seal attests the **image, not the module**, so per-module attribution is gone | conformance argument asserted; platform not in doubt |
 | 2 | **dynamic, in the bundle** | yes | yes | **admission is TCB admission**; release only where the implementation language permits | measured on both devices |
 | 3 | **staged at runtime** | **conditional** — OS layer open, store policy forbids the *act*, ordinary-device trust **open** | **yes**, via the first-party channel | membership fixed at release; bounded module count and size | measured on both (one device each); policy from primary sources |
-| 4 | **separate process** | **closed, kernel, permanent** | **absent today** — the platform permits it, but no selectable local-transport profile carries the endpoint | — | iOS closure measured; the Android gap is asserted **by our own rule**, and reachability is untested |
+| 4 | **separate process** | **closed, kernel, permanent** | **available**, via a Binder-delivered socketpair | a new transport profile; module delivery by memfd only | iOS closure measured; Android reachability **measured** |
 | 5 | **webview** | yes, **isolates**, ~93 MB/page | yes, **does not isolate** in the shipped shape, ~37 MB marginal | cannot block on its own outbound call | implemented and measured |
 | 6 | **in-process interpreter** | plausible | plausible | **unmeasured** | placement name reserved and deliberately undefined |
 | 7 | **remote** | yes | yes (deployment floor on the platform path) | cannot cover offline, latency-sensitive, or platform-access modules | decided; the recorded blocker was disproved |
 
-**Shape 4 deserves its own note**, because it is the one case where *our own proposal* closed a
-door the operating system left open. Android has three process shapes. What is missing is a
-selectable local-transport profile: the strategy is welded to a Unix-socket profile, and our
-anti-vacuity rule — a peer check counts only if its predicate *can fail* — voids that profile
-inside one application sandbox, where every peer necessarily presents the same identity. **A
-profile gap, not a platform one**, and the fix is one new profile rather than a concession.
+**Shape 4 deserves its own note**, because it was believed closed on both platforms and is not.
+
+On iOS it is closed permanently at the kernel. On Android it is **available** — measured: an
+isolated process reached a local endpoint over a socketpair whose descriptor was delivered by
+Binder, and **loaded and executed a module delivered after install**. It was recorded as absent
+because the strategy is welded to a Unix-socket profile that is unusable there — **a profile
+gap, not a platform one** — and the fix is one new profile rather than a concession.
+
+Two details from that measurement change how the profile must be written, and both invert the
+obvious design:
+
+- **No address-based local socket is reachable at all** — not filesystem (`connect()` returns
+  **ENOENT**, because the app's data directory is *not in an isolated process's mount
+  namespace*) and not abstract (separately denied by mandatory access control). This is a
+  *second, independent* reason beyond the peer-check problem.
+- **The obvious peer check is vacuous and a different one is not.** Peer credentials read across
+  a passed socketpair report the **creating** process, not the actual peer — they are stamped at
+  creation. The ancillary-credentials mechanism instead carries the true, kernel-attested
+  identity, unforgeable by the sender. **That predicate can fail**, which is what the rule
+  requires. But attestation is **one-directional**: the host can verify the module, and the
+  module cannot verify the host, so it must rest on the descriptor's provenance.
+
+And **module delivery must be by anonymous memory file, not a staged file** — a file in the
+app's data directory is denied execute permission, while an anonymous one carries a different
+label and maps cleanly. It must be mapped directly and never re-opened.
+
+**Availability is not advisability.** This changes what is *possible* on Android, not the
+recommendation below, which rests on composition and cost.
 
 ---
 

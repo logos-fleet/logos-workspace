@@ -174,6 +174,32 @@ packaging is irrelevant. C++ reaches zero TLVs by fixing one SDK line; light Rus
 -d:noSignalHandler`. **Async Rust and threaded Nim never will** — tokio, tracing, rayon and the
 Nim GC own thread-local state that cannot be cleared.
 
+### An Android isolated process can host a module
+
+Xiaomi, Android 15 / API 35, 2026-09-22. Every probe run twice — once against a same-UID
+service, once against an isolated one — **and the control passed every probe the isolated
+process failed**, so each negative is a property of isolation rather than a broken fixture.
+
+- **No address-based socket is reachable.** Filesystem: `connect()` → **`errno=2 ENOENT`**, with
+  `stat` and `access` also ENOENT on both socket and directory, and the node `chmod 0777` — so
+  the app data directory is **not in the isolated process's mount namespace**. Abstract
+  namespace: `errno=13`, `avc: denied { connectto } scontext=u:r:isolated_app:s0`.
+- **A Binder-delivered socketpair works**, both directions.
+- **Peer credentials are vacuous across it** — both ends report the *creating* process
+  (`uid=10252`) when the real peer is `uid=99314`, because credentials are stamped at creation.
+  **Ancillary credentials are not**: the kernel attached `pid=5812 uid=99314`, reading `10252`
+  against the control. **The predicate can fail.**
+- **Attestation is one-directional** — the isolated side cannot enable it
+  (`setsockopt → errno=13`, mandatory access control denying `setopt`).
+- **Module loading**: a file staged into `files/` fails every route, with `execute` denied on the
+  app-data label. An **anonymous memory file works** — mapped directly by descriptor, the
+  module's exported function **executed and returned its value**. It must never be re-opened by
+  path.
+
+*Not tested*: sealing the anonymous file before hand-off (it almost certainly should be), other
+vendors' policy, and **whether a real Module Host survives an isolated process** — this proves
+the transport and the loader, not the runtime.
+
 ---
 
 ## Platform APIs, settled from primary sources
