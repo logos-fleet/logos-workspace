@@ -219,6 +219,52 @@ replacing the job-id pair. The *mechanism* is measured; *"therefore the job-id p
 removed"* is **asserted** until one image is compiled against such an import. Until then the
 deferral defect remains live in the shipped artifacts.
 
+### Store policy: the interpreter is not a downgrade from the webview
+
+Worth stating explicitly, because the assumption ran the other way for most of this effort.
+Three questions separate cleanly, and only the third touches policy at all.
+
+**The interpreter itself ships compiled into the app.** It is ordinary submitted code. Nothing
+regulates shipping an interpreter on either store, and the one genuine platform prohibition —
+JIT — does not reach it: this is a pure interpreter, measured doing a full workload on a device
+where a JIT died at the call into generated code.
+
+**Running images bundled in the app engages no store rule.** Nothing is downloaded, so there is
+nothing to argue. The ~700× memory result stands on its own as an in-app isolation mechanism.
+
+**Running images downloaded after install is permitted by the letter of both rules — the same
+letter that permits the webview.** Apple's DPLA 3.3.1(B) bans downloading executable code and
+then carves out *interpreted* code, subject to three conditions (advertised purpose; no bypass of
+signing or sandbox; no storefront for other Applications). The pre-2017 restriction of that
+carve-out to WebKit and JavaScriptCore is **not in force** — neither string appears in the
+current agreement. **Under the text the engine does not matter**, so Shape 6 and Shape 5 are the
+same legal object. Play's rule carves out "code that runs in a virtual machine or an interpreter"
+in the same shape. Note the contrast with **Shape 3**: that one downloads *native* code, which is
+what both rules actually prohibit. Shape 6 downloads interpreted code, which is what both rules
+name as the exception.
+
+**What constrains it is engine-agnostic.** Guideline 2.5.2 forbids downloaded code that
+"introduces or changes features", and it binds Shapes 5 and 6 identically. The real question is
+catalog scope after review, not engine choice — the choice between these two shapes cannot be
+made on policy grounds.
+
+**One place Shape 6 is stronger.** The historical rejection trigger is native reach, and 4.7.2
+forbids exposing platform APIs to hosted plug-ins. A guest here has no ambient capability at all
+and reaches exactly the imports the host installed — 18 and 31 on the two measured images, an
+**enumerable** list. That is demonstrable rather than arguable, and it is the opposite shape to
+the `dlopen`/reflection bridges that drew enforcement.
+
+**Two places it is weaker, and one caveat on Play.** Downloaded QML and downloaded JS have years
+of listed precedent; downloaded wasm through a non-WebKit interpreter has **none** — no
+rejections, no acceptances, nothing. And Play's carve-out continues *"where either provides
+indirect access to Android APIs"*; our guests reach the host import table, not Android, so
+whether that clause reads as a requirement or an example is genuinely open, and a webview is
+their named example. **Nothing of ours has been through App Review**; all of the above is reading
+primary sources, which is a different thing from surviving a reviewer.
+
+*Grade: rule text is* **primary-source verified**; *the equivalence of engines and the reading of
+Play's trailing clause are* **inference**; *acceptance is* **untested**.
+
 ---
 
 ## What is a product decision, not a technical one
