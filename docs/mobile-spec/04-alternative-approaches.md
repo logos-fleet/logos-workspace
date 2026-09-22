@@ -269,7 +269,7 @@ Play's trailing clause are* **inference**; *acceptance is* **untested**.
 
 ## What is a product decision, not a technical one
 
-Four questions this work deliberately does not answer, because they are not ours to answer:
+Five questions this work deliberately does not answer, because they are not ours to answer:
 
 1. **Which module kinds tolerate remote hosting.** Tier 4's boundary is drawn by offline
    tolerance and latency budget — both product properties. The technical answer is "remote works
@@ -285,3 +285,23 @@ Four questions this work deliberately does not answer, because they are not ours
    technically open on one platform pending one experiment, forbidden by store policy regardless,
    and legal through the other platform's first-party channel. Whether an off-store channel is a
    product the team wants is not a technical question.
+5. **Which catalog shape the product has** — the one decision that actually binds under store
+   policy, and it is orthogonal to every shape above. A downloaded module adds functionality by
+   definition, so guideline 2.5.2 read literally forbids *any* catalog; it cannot be read that
+   way, because guideline 4.7 expressly permits downloadable plug-ins, and the DPLA's own
+   condition is the far weaker *"does not change the primary purpose"* — which a modular platform
+   satisfies by construction. So the question is which of three regimes we are in:
+
+   | | what it is | what it costs |
+   |---|---|---|
+   | **A** | fixed membership, everything present at release | no rule engaged — the shipped Bundled set |
+   | **B** | downloads only update module identities already reviewed at submission | defensible under 2.5.2 as not introducing features; the highest-precedent position available (the JS over-the-air pattern, ~1000 iOS builds/day, one reported rejection) |
+   | **C** | new module identities appear after review | squarely guideline 4.7: the **host is responsible for every module's compliance with all guidelines**, plus per-module consent (4.7.3), an index with universal links (4.7.4), age gating with the host rated at its highest module (4.7.5), IAP for paid modules, and no native platform API exposure (4.7.2) |
+
+   **C's real risk is silhouette, not mechanism.** The 2026 removals found in this effort were
+   apps whose *visible purpose* was running or previewing other people's unreviewed content —
+   and at least one was removed despite shipping **data-only** payloads. Technical compliance did
+   not save them. This is a question about what the product looks like when a reviewer opens it,
+   and it is answered identically whether the modules are wasm, QML or JS. **4.7.2 is the one
+   clause where Shape 6 is materially better placed than Shape 5** — the import table is
+   enumerable, so "no native platform API exposure" is demonstrable rather than argued.
