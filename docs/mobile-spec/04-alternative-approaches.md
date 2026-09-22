@@ -19,7 +19,7 @@ seven candidates into four tiers plus one delivery variable.
 | 3 | **staged at runtime** | **conditional** — OS layer open, store policy forbids the *act*, ordinary-device trust **open** | **yes**, via the first-party channel | membership fixed at release; bounded module count and size | measured on both (one device each); policy from primary sources |
 | 4 | **separate process** | **closed, kernel, permanent** | **available**, via a Binder-delivered socketpair | a new transport profile; module delivery by memfd only | iOS closure measured; Android reachability **measured** |
 | 5 | **webview** | yes, **isolates**, ~93 MB/page | yes, **does not isolate** in the shipped shape, ~37 MB marginal | cannot block on its own outbound call | implemented and measured |
-| 6 | **in-process interpreter** | plausible | plausible | **unmeasured** | placement name reserved and deliberately undefined |
+| 6 | **in-process interpreter** | **yes, measured** | untested | **~0.13 MB per live instance**, 0.23 ms per call, 0.4 ms to re-instantiate | **define it** — both gates passed on device |
 | 7 | **remote** | yes | yes (deployment floor on the platform path) | cannot cover offline, latency-sensitive, or platform-access modules | decided; the recorded blocker was disproved |
 
 **Shape 4 deserves its own note**, because it was believed closed on both platforms and is not.
@@ -174,29 +174,50 @@ works with **no executable page**, on a device that refused writable-executable 
 removes the webview's ~93 MB per page, its origin/frame/world binding, and the blast radius where
 several modules share one image.
 
-**The spike — four numbers and one yes/no**, running an *existing unmodified* module image on
-device: cold instantiate including validation, against the launch watchdog; per-call latency
-against a bridge round trip; resident memory per image, against ~93 MB — *if it is not
-dramatically smaller, the main argument collapses*; **whether an outbound call from inside a
-guest frame completes and returns into that frame**, which is the decisive claim and is currently
-reasoning rather than measurement; and which import surface the image actually requires, because
-our images are built against an emscripten libc and its filesystem, so **state persistence is
-re-opened, not inherited**.
+**The spike ran, and both gates passed on device.** An interpreter already vendored in this
+tree, running the **shipped, unmodified** core image on an iPad:
 
-Do not pick the interpreter by reputation — a JIT-capable engine is a dead end here, so the
-candidate set is interpreters only.
+| | |
+|---|---|
+| cold instantiate | **12.8–19.2 ms**, of which ~95% is validation — **paid once per image, not per instance** |
+| re-instantiate a compiled image | **0.4 ms** |
+| per call | **0.23 ms** mean (0.13 ms floor), with no process, thread or event-loop hop |
+| memory per additional live instance | **~0.13 MB** — against the webview's ~93 MB per page, roughly **700×** |
 
-**If it passes, three small edits**, because the ground is already prepared: define the reserved
-placement under the interpreted strategy, carrying the webview branch's verification rule
-verbatim; mirror the capability sub-fields, adding one for re-entrant outbound calls; and
-register a **third local-transport profile**, because neither existing one fits — one binds to an
-origin, frame and script world that do not exist here, and the other explicitly claims no
-containment, which is this shape's whole reason to exist. The substitute for a peer check is that
-**the host owns the interpreter's import table**: the guest reaches exactly the functions the
-host installed.
+Five extra instances were alive at once and all five still answered, so they are live rather
+than empty; the image's declared 20.1 MB of linear memory never becomes resident.
 
-**If it fails on memory or on re-entrancy, the shape stays reserved and undefined** — which is
-the outcome already chosen, and would then be chosen on evidence.
+**And the decisive question is answered YES, by measurement.** Inside a host import the guest
+called *while its own dispatch frame was still on the stack*, the host made a **real blocking
+outbound round trip**, then **re-entered the same instance** with a nested delivery the guest
+answered **from frame depth 2**, then returned into the still-live outer frame, which produced
+its own Result normally.
+
+**It generalises.** A Rust-cored image has 31 imports against the C++ image's 18, **every one of
+the same host-implementable kinds** — the extra thirteen are filesystem syscalls, and neither
+image needs a JS engine. The small surface is a property of the **core-image host**, and it does
+**not** grow with the module's language.
+
+**Two real limits, both specific.** The Rust-cored image does not currently load, for a reason
+**orthogonal to imports**: it carries legacy exception-handling opcodes the interpreter cannot
+parse, originating in Rust's unwinder on this target — with a named, untested likely fix. And
+**`view_backend` images are structurally out of scope**: they embed arbitrary JS and need a JS
+engine, so the placement covers `web` **core** images while UI views stay in the webview.
+
+**So: define the placement**, with three small edits — the reserved placement under the
+interpreted strategy carrying the webview branch's verification rule verbatim; the capability
+sub-fields plus one for re-entrant outbound calls; and a **third local-transport profile**,
+because neither existing one fits — one binds to an origin, frame and script world that do not
+exist here, and the other explicitly claims no containment, which is this shape's whole reason to
+exist. The substitute for a peer check is that **the host owns the interpreter's import table**:
+the guest reaches exactly the functions the host installed, and an unimplemented import is
+reported by name rather than silently stubbed.
+
+**One condition, and it must not be glossed.** The shipped host has **no outbound door linked in
+at all**, so realising a synchronous outbound needs **one ABI edit** — an outbound import
+replacing the job-id pair. The *mechanism* is measured; *"therefore the job-id pairs can be
+removed"* is **asserted** until one image is compiled against such an import. Until then the
+deferral defect remains live in the shipped artifacts.
 
 ---
 

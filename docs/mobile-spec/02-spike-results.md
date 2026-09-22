@@ -200,6 +200,54 @@ process failed**, so each negative is a property of isolation rather than a brok
 vendors' policy, and **whether a real Module Host survives an isolated process** — this proves
 the transport and the loader, not the runtime.
 
+### An in-process wasm interpreter runs a shipped module image, and can re-enter
+
+iPad Air 4, iOS 26.5.2, 2026-09-22. An interpreter already vendored in this tree, as an arm64
+staticlib in a 5.3 MB standalone probe app — **not** the product shell. Image: the shipped,
+**unmodified** core web image.
+
+| | run 1 | run 2 |
+|---|---|---|
+| validate + translate | 17.2 ms | 11.8 ms |
+| instantiate | 0.1 ms | 0.1 ms |
+| constructors + entry | 0.8 ms | 0.6 ms |
+| **total cold** | **19.2 ms** | **12.8 ms** |
+
+**Re-instantiating an already-compiled module: 0.4 ms** — validation is ~95% of the cost and is
+paid **once per image, not per instance**.
+
+**Per call**, 200 iterations after 20 warm-ups: a real method answered by the module's own code,
+full frame in and Result out — **mean 0.23 ms, best 0.17 ms**; dispatch floor **0.13 ms**. No
+process, thread or event-loop hop. *No local bridge round-trip figure exists, so no ratio is
+claimed.*
+
+**Memory**: first image **+0.9–1.1 MB**; each additional live instance **+0.13 MB**, with five
+more alive at once and **all five still answering** afterwards. The image's declared 20.1 MB of
+linear memory **never becomes resident**. Against the webview's ~93 MB per page that is roughly
+**700×**.
+
+**Re-entrancy — the decisive result.** Inside a host import the guest called *while its own
+dispatch frame was still on the stack*: a **real blocking outbound round trip** completed
+(0.32 ms warm), then a **nested re-entry into the same instance** which the guest answered from
+**frame depth 2**, then a return into the still-live outer frame, which produced its own Result
+normally. Separately, an import the **shipped** image already calls during init does the same
+thing — blocks on an outbound, calls back into the guest, and returns a value the guest consumes.
+
+**Import surface generalises**: 18 imports for a C++-cored image (all implemented, none stubbed),
+31 for a Rust-cored one — **the same host-implementable kinds**, the extra thirteen being
+filesystem syscalls. **No JS-only import in either**, so no JS engine is required. The surface is
+a property of the **core-image host** and does not grow with the module's language.
+
+**Two limits.** The Rust-cored image does not load, for a reason **orthogonal to imports** —
+legacy exception-handling opcodes the interpreter cannot parse, originating in Rust's unwinder on
+this target; the likely fix is named and **untested**. And **view-backend images are structurally
+out of scope**: they embed arbitrary JS and need a JS engine.
+
+*Not attempted*: a rebuild with the proposed flag; a real inter-module outbound rather than a
+socket round trip (**stack mechanics measured, equivalence inferred**); shell integration, so no
+claim about its cost; **one device, iOS only**; persistence; and **no teardown measurement**, so
+nothing here speaks to reclaiming memory.
+
 ---
 
 ## Platform APIs, settled from primary sources

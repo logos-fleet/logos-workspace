@@ -39,6 +39,10 @@ What turned out to be possible after all:
   reachable through platform TLS on both phones.
 - **A `web` variant can do real networking** — measured, over TLS, from a Worker. The real line
   is **listening versus dialing**, not "networking".
+- **An in-process interpreter runs a shipped module image at ~0.13 MB per instance** — roughly
+  700× cheaper than a webview page — and **can re-enter**: a blocking outbound call completed
+  inside a live guest frame, with a nested re-entry answered at frame depth 2. The constraint
+  that a hosted image cannot block is a **webview property, not a wasm property**.
 - **One platform can host a module out-of-process after all** — an isolated process reached a
   local endpoint over a descriptor-delivered socket and **executed a module delivered after
   install**, giving it a per-module failure domain and a real identity boundary the other
