@@ -178,6 +178,28 @@ a crate gates its browser backend on the target triple, not because of any sandb
 anything whose contract must **block on its own outbound call**; that is deadlock, not slowness,
 and threads would not help even where they exist.
 
+**That disqualification cannot be applied to UI, and this document previously glossed it.** The
+deadlock is a property of the *execution context*, not of what the code does: one thread, one
+queue, run to completion. A UI that calls another module while handling an event meets exactly
+the same wall. Two things save the ordinary case and neither is a property of the placement:
+
+- **The language, not the tier.** JavaScript's `await` is not a wait — it returns from the current
+  task and schedules the remainder as another, so the queue drains and the reply arrives. A
+  **compiled** UI has no such mechanism.
+- **The direction.** A UI is a *caller*. A caller that cannot block restructures its own internals
+  — ugly, invisible, no contract changes. A *callee* that cannot block exposes job ids in its
+  public methods, and that is the breach.
+
+So a **compiled view backend** — Qt-wasm and anything like it — has the deadlock, has no `await`,
+and **cannot take the interpreter escape**, because a view backend needs a JS engine and a DOM.
+Both of its symptoms are already measured in this workspace: the page thread is shared and QML
+**starves the channel**, and the obvious workaround of spinning a nested event loop while waiting
+makes container calls **answer out of order** — re-entrancy, not a hang.
+
+Its only available fixes are the expensive ones: cross-origin isolation with real blocking,
+engine-level stack switching, or a toolchain stack rewrite. **This is unresolved**, and it is why
+the loopback-origin question below is larger than it looks.
+
 **The two platforms diverge in character while staying one shape**: on iOS ~93 MB per page makes
 this a two-or-three-module ceiling **but it isolates**; on Android ~37 MB marginal is affordable
 but buys **no isolation** in the shipped shape, while the per-app-process alternative isolates at
@@ -272,6 +294,9 @@ image needs a JS engine. The small surface is a property of the **core-image hos
 parse, originating in Rust's unwinder on this target — with a named, untested likely fix. And
 **`view_backend` images are structurally out of scope**: they embed arbitrary JS and need a JS
 engine, so the placement covers `web` **core** images while UI views stay in the webview.
+**That exclusion has a consequence worth stating plainly**: a *compiled* view backend inherits the
+deferral deadlock with **no escape to this shape**, so it is the one case the interpreter does not
+rescue. See Tier 3.
 
 **So: define the placement**, with three small edits — the reserved placement under the
 interpreted strategy carrying the webview branch's verification rule verbatim; the capability
@@ -390,8 +415,13 @@ Five questions this work deliberately does not answer, because they are not ours
    tolerance and latency budget — both product properties. The technical answer is "remote works
    and has no blocker"; *which* modules go there is a judgement about the experience.
 2. **Whether to pursue an in-app loopback origin on iOS.** It buys cross-origin isolation, and
-   with it threads and synchronous fetch. It costs per-module port management, because the
-   persistent store is keyed by origin, and it cannot be validated on a simulator. A real trade.
+   with it threads and **genuine blocking** — shared memory plus a wait primitive, measured
+   available on that platform since Safari 15.2 and denied today by **our own** custom-scheme
+   origin rather than by the platform. It costs per-module port management, because the
+   persistent store is keyed by origin, and it cannot be validated on a simulator.
+   **Weight it higher than a threads-and-fetch convenience**: for a compiled view backend, which
+   has no `await` and no interpreter to move to, it is the cheapest of only three fixes for the
+   deferral deadlock described under Tier 3.
 3. **Whether to use one platform's extra isolation or keep one shape across both.** The
    recommendation is to keep one shape, argued on composition and cost — but the counterweight is
    real, since that platform's admission boundary is measured weak and process is its only
