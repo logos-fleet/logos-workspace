@@ -54,6 +54,30 @@ deployment's declared direct-call budget; a deployment whose calling thread is u
 liveness bound MUST declare one. **The remedy for a module that cannot satisfy it is a different
 realization, not an exception to the synchronous rule.**
 
+**The consequence of breach has to be stated, and the first draft of this item did not state it.**
+A synchronous in-process call **cannot be interrupted** — there is no cancellation point, killing
+the thread corrupts the process, unwinding past it leaves locks held, and `§2.8` itself forbids
+moving the callback to another thread. So the specification MUST say plainly that **the bound is
+not enforceable in the direct path**, or an implementer will write a fictional abort. What the
+bound actually does is:
+
+- **admission** — a realization profile that cannot promise the bound is not admitted to the
+  direct path. This is the only place with teeth, and it is why the check belongs in `RUNTIME §6.4`.
+- **detection** — an overrun is measured after the callback returns and recorded as a
+  **conformance violation by the module**. It MUST NOT be reported as module failure, consistent
+  with the `§10.1` proposal below.
+- **re-placement** — repeated violation makes the module ineligible for direct realization,
+  evaluated at the next Runtime start, for the same reason quarantine is: an in-process thing
+  cannot be stopped mid-life.
+
+Never interruption. And a call that never returns is not detectable at all — the platform's own
+watchdog resolves it. **The budget is therefore a placement-decision mechanism, not a safety
+mechanism**; the safety comes from `LOADER §12`'s admission duty.
+
+**Enforceability is itself a per-realization capability**, and the profile should say which it
+has: a native direct realization can only declare and detect; an interpreted realization can
+genuinely interrupt (fuel metering); an out-of-process one can terminate.
+
 > As written today, `§2.8` plus the absence of any duration bound is an unbounded-duration
 > obligation on whatever thread published — which on a phone is frequently the one shared UI
 > thread. **The specification currently describes the mechanism that kills the application as a
@@ -73,6 +97,37 @@ implementation-dependent, which is worse for conformance than a certain crash.)*
 **Non-normative note** — a realization whose module-facing ABI cannot defer MUST NOT present
 that limit as a contract property, and MUST NOT cause a module to publish methods its native
 twin does not.
+
+**`§2.6` — the ABI needs somewhere to put "not yet", and today it has none.** The rule above is
+unimplementable against the current entry point (`spec-module-interface.md:1330-1337`): no call
+identity comes in, so a module could not name the call later, and the return admits exactly two
+outcomes — the answer, or a failure. `LOGOS_ERR_NOT_READY` is an error, not a promise. So the
+deferral cannot be hidden in runtime plumbing; the information does not cross the boundary.
+
+Three **additive, opt-in** pieces close it, and none is a break:
+
+1. a **second** provider entry point alongside `_dispatch()`, taking a Runtime-assigned call
+   identity and permitted to return a new **`LOGOS_PENDING`**;
+2. a **completion path** — preferably a host-installed callback, matching the publish callback
+   already in `§2.8`, rather than a new Runtime Control method, since a Runtime Control method is
+   a schema change and those propagate;
+3. a flag in the existing **`_call_surface()`** descriptor advertising it.
+
+A module exporting none of them behaves exactly as today.
+
+**The two realizations need different edits, and conflating them is a trap.** The native ABI is
+coupled — the answer must exist when dispatch returns — and needs the three pieces above. A
+frame-based hosted ABI is **already decoupled**: delivery returns nothing and the Response is
+committed later by a separate send. Its missing piece is the other one — an **outbound import**,
+so a guest can call out while its own frame is live. Same goal, different edit.
+
+> **Who ever sees the call identity: not the module author.** Its consumers are the toolchain
+> (generated or transformed code needs an ABI-level way to say "not yet"), the Runtime (a call it
+> does not know is outstanding cannot be bounded or cancelled — so this is what makes the
+> `TRANSPORT §4.1` completion bound implementable at all), and the author who *chooses* it,
+> which is legitimate: a module whose work is inherently long-running should not hold a thread
+> for it even natively. In every case the **contract is unchanged** — one method, returning the
+> value, on every target.
 
 ---
 
@@ -118,12 +173,29 @@ NOT be acquisition order**. **This specification defines no budget value.**
 
 ## LOGOS-MODULE-TRANSPORT
 
-**`§4.1`** — a callee MAY commit a Response in a later turn; a caller MUST NOT require it within
-the delivering turn, nor treat that turn's completion as evidence of abandonment. Every Request
-MUST have a **finite completion bound**, which MUST NOT be derived from method identity in a
-contract. On expiry the awaiting side MUST send Cancel and report exactly one terminal Response
-with a timeout error — **and MUST NOT close the connection for that reason alone**, because on a
-bridge channel the connection is the entire module.
+**`§4.1`** — **the return of the operation that delivered a Request MUST NOT be coupled to the
+commitment of that Request's Response**, and a caller MUST NOT treat the delivery operation's
+return as evidence of abandonment. Every Request MUST have a **finite completion bound**, which
+MUST NOT be derived from method identity in a contract. On expiry the awaiting side MUST send
+Cancel and report exactly one terminal Response with a timeout error — **and MUST NOT close the
+connection for that reason alone**, because on a bridge channel the connection is the entire
+module.
+
+> An earlier draft of this item said *"may commit a Response in a later **turn**"*. The word
+> **turn** appears **zero times** in all twelve documents — it was imported from the event-loop
+> world, and a proposal cannot use vocabulary the specification does not define. The phrasing
+> above needs no new term: it is stated against `§6`'s existing linearization point, and it is
+> **equally true on a thread**, where it simply costs nothing. That is the test this whole class
+> of fix should pass — not a new branch for a new execution model, but the general rule that an
+> unstated assumption had quietly narrowed.
+
+**What the specification is assuming, and why it matters.** Nowhere does it say "modules run on
+threads"; it assumes **blocking is free** — that waiting costs only your own thread while other
+work proceeds. That assumption is invisible because it is never written down, and it fails in any
+**run-to-completion** context: a page or Worker event loop, a wasm guest built without stack
+switching, a signal handler, an interrupt context. The specification should **not** learn the word
+"event loop" — that names a mechanism, is too narrow for the class, and would fork the rules.
+Removing the assumption covers all of them at once.
 
 > Note the gap this fills: **the document contains the word "timeout" zero times**, while a
 > timeout error code exists with nobody specified to emit it.

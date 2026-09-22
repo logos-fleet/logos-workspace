@@ -197,8 +197,22 @@ Both of its symptoms are already measured in this workspace: the page thread is 
 makes container calls **answer out of order** — re-entrancy, not a hang.
 
 Its only available fixes are the expensive ones: cross-origin isolation with real blocking,
-engine-level stack switching, or a toolchain stack rewrite. **This is unresolved**, and it is why
-the loopback-origin question below is larger than it looks.
+engine-level stack switching, or a toolchain stack rewrite. **This is unresolved.**
+
+**Second correction, on this same paragraph.** An earlier revision called cross-origin isolation
+*"the cheapest of three fixes"* for this case. That is wrong, or at best half of one: the blocking
+primitive it unlocks is **not permitted on a page's main thread** — that agent is defined as
+non-blocking and the call throws — and a view backend **cannot simply move to a Worker**, because
+it needs a DOM and Workers have none. So for a compiled view backend cross-origin isolation
+supplies shared memory and **no ability to block**: necessary, not sufficient. The real path is
+cross-origin isolation **plus** running the image's entry point on a pthread and proxying DOM
+calls back to the main thread — a build-mode change with real cost per DOM interaction, not a
+header. *(Both halves of that are* **inherited** *— standard, well-established, and untested
+here; both are cheaply falsifiable.)*
+
+**This paragraph is the least reliable part of this document**: two separate errors by its author
+in successive revisions, both in the direction of making the webview case sound more tractable
+than it is. Treat its remaining claims as the weakest in the set.
 
 **The two platforms diverge in character while staying one shape**: on iOS ~93 MB per page makes
 this a two-or-three-module ceiling **but it isolates**; on Android ~37 MB marginal is affordable
@@ -404,6 +418,42 @@ primary sources, which is a different thing from surviving a reviewer.
 
 *Grade: rule text is* **primary-source verified**; *the equivalence of engines and the reading of
 Play's trailing clause are* **inference**; *acceptance is* **untested**.
+
+---
+
+## One obligation this analysis puts on the platform, not on module authors
+
+A module author should be able to write the natural blocking form —
+
+```c
+Rate r = call_out("rates", "get_rate", "USD");
+```
+
+— and be correct everywhere, without knowing the execution model. That holds **in every
+realization above except one**. Where the OS can save and restore the stack (native, and the
+interpreter, where the guest frame sits on a real host thread) it is free. Where a genuine
+blocking primitive is available to a Worker it is free. Where the engine can switch stacks it is
+free. Where only a toolchain stack rewrite is available it costs size and speed — **but still not
+the author**, because the transform writes the split, not the developer.
+
+**Only a realization with no mechanism at all breaks it**, and it breaks it permanently: modules
+written against that configuration encode the split in their source, and that source outlives the
+configuration. So the constraint is:
+
+> **Never ship a hosted realization that has none of the four mechanisms.**
+
+This is the strongest argument for the interpreter placement and it is not a memory argument. The
+700× figure is a cost saving; **this is a correctness property of the developer contract.**
+
+And it is the reason the `LOADER §4` capability field earns its place even though no author ever
+reads it — it is what lets the platform refuse to create that situation at admission, rather than
+discover it on a device.
+
+Note what authors *do* still owe, and that it is already environment-independent: `INTERFACE §2.8`
+requires a module to tolerate conforming re-entry and to synchronize its per-instance state. That
+rule is correct on a thread pool, in an event loop, and under deferred completion alike — in a
+single-threaded host the locks are simply uncontended. **Write to §2.8 and the environment stops
+mattering**, which is exactly the property this section is protecting.
 
 ---
 

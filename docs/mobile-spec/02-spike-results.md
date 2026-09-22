@@ -263,6 +263,47 @@ hardware-bindable nowhere on iOS.**
 
 ---
 
+## Read from the shipped source, not exercised
+
+Three findings established by reading the tree rather than by running anything. **Grade: source
+read.** Weaker than a device measurement — no check would fail if the reading were wrong — but
+stronger than inference, since each cites a line that either says this or does not.
+
+**Neither execution path speaks deterministic CBOR today; both carry JSON.** Natively the shipped
+provider entry is `char* (*dispatch)(const char* method, const char* argsJson)`
+(`repos/logos-liblogos/src/logos_core/bare_module_abi.h:31`); on the web path every call is
+`JSON.stringify(args)` (`repos/logos-js-sdk/src/client.js:71`). So the specification's CBOR plus
+payload-commitment model is **ahead of us on both paths equally**. That reframes it as a shared
+migration cost rather than a mobile one, and it means "will the CBOR be identical across targets"
+is a question about the target state, not a present divergence.
+
+**The web container is four hops across three queues, and the module is not on the page's main
+thread.** From `repos/logos-module-builder/wasm/loader.html`: the host injects into the page main
+thread, which forwards to a Worker (`channel.setReceiver((text) => worker.postMessage(text))`,
+`:82`); the Worker instantiates the image and makes the ABI call (`logos-wasm-worker.js:74`,
+`cwrap('logos_wasm_deliver', null, ['string'])`); replies return through `worker.onmessage`
+(`loader.html:84`) and leave by `fetch` down the custom scheme
+(`MobileWebBridge.cpp:162`). The Worker exists for an unrelated and good reason — *"a wasm trap is
+a module failure, not a page crash"* (`loader.html:55`).
+
+Two consequences. A blocked module stops **its own Worker's queue**, one hop short of the reply —
+while **the page's main thread stays free throughout**, which is exactly why a shared-memory wake
+is the precise fix for a core module: it bypasses that queue rather than draining it. And the
+wasm-side entry returns `void`, so **at that boundary delivery-return and response-commitment are
+already separate events** — the frame protocol was async-shaped from the start, and the native
+ABI is the coupled one.
+
+**The page and the Worker together are one Module Host, and the specification does not model a
+Module Host with internal structure.** `LOGOS-MODULE-LOADER §1` has it create and supervise *one*
+Module Host performing *"process-local ABI operations"* — a phrase assuming the transport endpoint
+and the ABI calls sit together. Ours are on two threads with a queue between, and the deadlock
+lives in that seam. Keeping the seam opaque is legitimate — a Module Host is declared realization
+machinery with no identity or lifecycle — but its **one externally observable consequence**,
+whether a re-entrant outbound call can be served, is what capability advertisement exists for.
+This is the cleanest justification for the `LOADER §4` sub-field.
+
+---
+
 ## Open experiments
 
 1. **Does an ordinary iOS device accept a staged team-signed module?** Needs a device outside
@@ -276,3 +317,7 @@ hardware-bindable nowhere on iOS.**
    on this and it is inference.
 5. **Is `logos://` categorically outside cross-origin isolation, or only as configured?** Only
    that scheme was tried.
+6. **Is the blocking primitive really unavailable to a page's main thread, and does proxying the
+   entry point to a pthread restore it?** Decides whether a *compiled* view backend has any cheap
+   fix at all. Currently **inherited on both halves**, and it is the one case the interpreter
+   placement does not rescue.
