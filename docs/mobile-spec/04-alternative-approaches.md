@@ -21,8 +21,9 @@ seven candidates into four tiers plus one delivery variable.
 | 5 | **webview** | yes, **isolates**, ~93 MB/page | yes, **does not isolate** in the shipped shape, ~37 MB marginal | cannot block on its own outbound call | implemented and measured |
 | 6 | **in-process interpreter** | **yes, measured** | untested | **~0.13 MB per live instance**, 0.23 ms per call, 0.4 ms to re-instantiate; confines memory and authority but **contains no fault** | **define it** — both gates passed on device; the confinement claim is **inherited, unprobed** |
 | 7 | **remote** | yes | yes (deployment floor on the platform path) | cannot cover offline, latency-sensitive, or platform-access modules | decided; the recorded blocker was disproved |
+| 8 | **separate app** | **blocked on scheduling, not transport** — the channels exist, a second app does not run | **available and well-trodden** — bound service over Binder | release cadence becomes store cadence; a full app process each; all-new packaging | **inherited — nothing measured**; two named probes below |
 
-**Shape 4 deserves its own note**, because it was believed closed on both platforms and is not.
+**Shapes 4 and 8 deserve their own notes**, because it was believed closed on both platforms and is not.
 
 On iOS it is closed permanently at the kernel. On Android it is **available** — measured: an
 isolated process reached a local endpoint over a socketpair whose descriptor was delivered by
@@ -50,6 +51,74 @@ label and maps cleanly. It must be mapped directly and never re-opened.
 
 **Availability is not advisability.** This changes what is *possible* on Android, not the
 recommendation below, which rests on composition and cost.
+
+---
+
+## Shape 8: each module is its own app
+
+Raised after the shapes above were settled, and **not covered by any spike**. Everything in this
+section is **inherited** — platform mechanism, not probe result. It is recorded because the
+Android half looks stronger than Shape 4 and because the iOS half is closed for a reason that is
+**not** the one intuition supplies.
+
+**On Android it is available, and better-attested than Shape 4.** Each module ships as its own
+APK exposing a bound service; the host binds and calls across Binder.
+
+- **Fault containment is real** — separate app, separate UID, separate process; the host receives
+  a disconnect and survives. This is what no in-process shape can supply.
+- **The peer check is kernel-stamped per transaction** (`getCallingUid`/`getCallingPid`) and its
+  predicate can fail — against Shape 4, where the obvious check was **measured vacuous** across a
+  passed socketpair.
+- **Attestation is bidirectional**, unlike Shape 4, where the module was measured unable to
+  verify the host.
+- **Signature-level permissions** restrict binding to APKs signed with our key.
+- The pattern is the platform's own — this is how its first-party services are built — so the
+  precedent is far deeper than anything else in this document.
+
+**On iOS the blocker is scheduling, not transport, and that distinction matters.** The channels
+exist: App Groups give a shared container and keychain between same-team apps, cross-process
+notifications work, loopback works, a shared mapped file works. **What does not exist is a second
+app running.** One third-party app executes; background work is confined to a fixed set of
+declared modes and a suspension deadline. The pipe can be built and nothing will be listening.
+The obvious workaround inverts: waking the other app by URL **backgrounds the caller** — already
+measured in this effort. So Android's Shape 4 blocker was a *profile* gap and this is a *platform*
+property; they are mirror images, not the same finding.
+
+**App extensions are the honest caveat.** An extension is genuinely a concurrent, separately
+sandboxed process, and structurally it is the platform's answer to this question. Three things
+make it a poor general module mechanism and one closes it: extension points are a fixed,
+system-defined set, each **invoked by the system** rather than by the host, so none is an RPC
+server; per-type memory ceilings are severe; and **extension bundles ship inside the containing
+app's bundle**, fixed at release — which makes it Shape 2 with extra steps, forfeiting
+post-release delivery.
+
+**The notable property: the store question dissolves, on both stores.** This is the only shape
+where "may not download executable code" never arises, because the store *is* the delivery
+channel — nothing is downloaded, a user installs an app. It therefore sidesteps the entire
+catalog-shape decision that Shapes 3, 5 and 6 must each negotiate. On Android that is a real
+strategic advantage; on iOS it is moot, since the shape does not function.
+
+**What it costs.** Module release cadence becomes store review cadence, and version skew across
+independently-updated modules becomes a support matrix we no longer control. Each module needs
+its own listing and install flow. Memory is **worse** than Shape 4, not better — a full app
+process each. Package visibility and tightening background restrictions apply. And it is
+**platform-conditional by nature**, so it would have to be advertised capability rather than
+normative text.
+
+**Three probes would settle it**, each able to fail:
+
+1. **Concurrency, iOS.** Two same-team apps, one App Group; the second writes a monotonic
+   heartbeat to the shared container. Foreground the first, background the second, and observe
+   whether the heartbeat stops and how quickly. If it does not stop, the central claim above is
+   wrong and the shape reopens.
+2. **Wake, iOS.** From the first app, post a cross-process notification and attempt a loopback
+   connect while the second is suspended. If either wakes it without a URL hand-off, a channel
+   has been written off incorrectly.
+3. **Bound service, Android.** A round trip between two minimal APKs behind a signature
+   permission, asserting the callee reads the true calling uid — the same standalone-APK harness
+   the isolated-process work used.
+
+**Unrun.**
 
 ---
 
