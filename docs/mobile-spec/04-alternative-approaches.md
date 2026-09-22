@@ -19,7 +19,7 @@ seven candidates into four tiers plus one delivery variable.
 | 3 | **staged at runtime** | **conditional** — OS layer open, store policy forbids the *act*, ordinary-device trust **open** | **yes**, via the first-party channel | membership fixed at release; bounded module count and size | measured on both (one device each); policy from primary sources |
 | 4 | **separate process** | **closed, kernel, permanent** | **available**, via a Binder-delivered socketpair | a new transport profile; module delivery by memfd only | iOS closure measured; Android reachability **measured** |
 | 5 | **webview** | yes, **isolates**, ~93 MB/page | yes, **does not isolate** in the shipped shape, ~37 MB marginal | cannot block on its own outbound call | implemented and measured |
-| 6 | **in-process interpreter** | **yes, measured** | untested | **~0.13 MB per live instance**, 0.23 ms per call, 0.4 ms to re-instantiate | **define it** — both gates passed on device |
+| 6 | **in-process interpreter** | **yes, measured** | untested | **~0.13 MB per live instance**, 0.23 ms per call, 0.4 ms to re-instantiate; confines memory and authority but **contains no fault** | **define it** — both gates passed on device; the confinement claim is **inherited, unprobed** |
 | 7 | **remote** | yes | yes (deployment floor on the platform path) | cannot cover offline, latency-sensitive, or platform-access modules | decided; the recorded blocker was disproved |
 
 **Shape 4 deserves its own note**, because it was believed closed on both platforms and is not.
@@ -218,6 +218,52 @@ at all**, so realising a synchronous outbound needs **one ABI edit** — an outb
 replacing the job-id pair. The *mechanism* is measured; *"therefore the job-id pairs can be
 removed"* is **asserted** until one image is compiled against such an import. Until then the
 deferral defect remains live in the shipped artifacts.
+
+### What isolation it actually provides
+
+The placement's containment story is **not** one property, and the four parts do not move
+together. Against Shape 5:
+
+| | webview | in-process interpreter |
+|---|---|---|
+| **memory confinement** | MMU, separate process on iOS — **but measured *not* isolating in the shipped Android shape**, where several modules share a page | guest addresses only its own linear memory, no instruction forms a host pointer, separate `Store` = separate memory — **the same on both platforms** |
+| **ambient authority** | the whole browser surface; we *subtract* | **none**; we *add*. 18 and 31 enumerable imports on the two measured images, an unimplemented one refused **by name** |
+| **resource bounding** | the browser's scheduler | the primitives exist in the vendored crate — fuel metering (`OutOfFuel`) and `StoreLimits` (`memory_size`, `instances`, `tables`, `table_elements`) — **and we use none of them** |
+| **fault containment** | a page crashes alone | **none — shared process, shared fate** |
+
+**Grade, and it matters.** The webview rows are **measured in this effort**. The interpreter's
+memory-confinement row is **inherited from wasm's design and wasmi's, not locally probed** — it is
+the one load-bearing claim in this shape that no probe of ours has tried to falsify. The
+resource-bounding row is **primary-source verified** (the APIs are present in wasmi 0.40 as
+vendored) and **untested by us**.
+
+**Three caveats on resource bounding**, before anyone leans on it. The limiter's own
+documentation scopes it to *guest linear memory* — not wasmi's bookkeeping, not embedder
+allocations — so it is not a total-footprint cap. **Fuel counts guest instructions, so time spent
+inside a host import is unbounded**: a guest that spams the outbound door is not fuel-limited, and
+the host must rate-limit its own doors. And fuel carries per-instruction cost, while the 0.23 ms
+per call was measured **without** it.
+
+**Fault containment is the structural gap and no in-process design closes it.** A guest *trap* is
+caught and returned as an error, but a defect in the interpreter or in a host import takes the
+process. This is Shapes 1 and 2's problem exactly, and a per-module failure domain is precisely
+what Shape 4 supplies — which iOS cannot have at all, at the kernel. If failure domains are a
+requirement, nothing available on that platform delivers them.
+
+**The trusted base comparison cuts both ways.** wasmi is small, memory-safe, and **performs no
+code generation at all** (verified against the vendored source), which removes the single largest
+class of browser sandbox escape; and with no high-resolution timer and no shared memory unless the
+host grants them, the side-channel work browsers needed COOP/COEP and timer coarsening for is
+largely moot. Against that: WebKit is patched by the platform vendor out of band, **and is
+re-sandboxed into its own process precisely because that vendor assumes it will be
+compromised**. Our surface is genuinely smaller and it is genuinely ours to keep correct.
+
+**The spike that would settle it** — same harness and device as the placement spike, and every
+probe able to fail: a read outside linear memory; a grow past the `StoreLimits` cap; an infinite
+loop against set fuel; a call to an ungranted import; a reach at a sibling instance's memory; a
+**deliberate trap at guest depth 2 while a re-entrant outer frame is live** (the one that matters
+most, since the re-entrancy result now rests on that unwind); and outbound-door spam, to confirm
+fuel does *not* bound it and to size what the host must add. **Unrun.**
 
 ### Store policy: the interpreter is not a downgrade from the webview
 
