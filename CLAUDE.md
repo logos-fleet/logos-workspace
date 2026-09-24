@@ -178,6 +178,46 @@ nix flake init -t github:logos-co/logos-module-builder
 
 Read the developer guide first when working on module code. It covers the full lifecycle: creating, building, testing, packaging, inter-module communication.
 
+## Specifications and evidence
+
+This workspace carries its own copy of the module specifications and a dated, graded record of
+what has actually been proven about them. **Consult these before asserting what a platform,
+a runtime or a module can or cannot do.**
+
+| Path | What it holds |
+|------|---------------|
+| `docs/spec/` | Dated snapshot of the twelve `LOGOS-MODULE-*` specification documents, so any section citation is followable without leaving the repo |
+| `docs/evidence-ledger.md` | Every load-bearing claim, graded and dated, including the ones that turned out to be wrong. **The first place to look before repeating a platform limit** |
+| `docs/mobile-spec/` | The module architecture on mobile: proposed specification amendments, spike results, genuine impossibilities, and placement alternatives |
+| `docs/research/` | Primary sources: store policy read from the agreements themselves, Qt-wasm in a webview, individual spikes |
+| `docs/adr/` | Numbered architecture decisions |
+| `docs/mobile-venue.md` | The physical devices available here and how to claim one |
+
+### Grade a claim before you rely on it
+
+| Grade | Means |
+|-------|-------|
+| **IMPLEMENTED** | Code, *plus a check that fails if the claim is false* |
+| **MEASURED** | A command, a named device, a number, a date |
+| **ASSERTED** | Written down, nothing behind it |
+| **INHERITED** | General knowledge, no local evidence |
+
+Three rules learned expensively here:
+
+- **A check counts only if its predicate can fail.** A test that would pass whether or not the
+  claim holds proves nothing. Shipped examples of this failing: a symbol gate that checked
+  `sigaction` but not plain `signal`; a peer check that reads the socket's *creating* process
+  rather than its peer.
+- **Proving the positive never proves the prohibition.** "X works" is not evidence for "Y is
+  impossible."
+- **A simulator result cannot evidence a device claim**, and a code comment citing an ADR is
+  not evidence.
+
+Nine of roughly twenty-three inherited claims in this area were found false when actually
+measured — **every one of them over-constraining what mobile could do**, including several
+written confidently into source comments and ADRs. If a doc, a comment or an ADR states a
+platform limit without a date and a device, treat it as unverified and go and check.
+
 ## Dependency chain
 
 ```
