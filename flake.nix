@@ -78,8 +78,24 @@
       inputs.logos-package.follows = "logos-package";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    logos-container-subprocess = {
+      url = "github:logos-fleet/logos-container-subprocess/697c1805eae689fc5945d2afe7038a4b608df07f";
+      inputs.logos-nix.follows = "logos-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    logos-module-loader-qt = {
+      url = "github:logos-fleet/logos-module-loader-qt/888da92cfed51f8039efb11c8a1cbdcb38d04e37";
+      inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
+      inputs.logos-module.follows = "logos-module";
+      inputs.logos-nix.follows = "logos-nix";
+      inputs.logos-protocol.follows = "logos-protocol";
+      inputs.logos-qt-sdk.follows = "logos-qt-sdk";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     logos-liblogos = {
       url = "github:logos-fleet/logos-liblogos/f2806bc79bb0842e08afee9d401e834809719f51";
+      inputs.default-container.follows = "logos-container-subprocess";
+      inputs.default-module-loader.follows = "logos-module-loader-qt";
       inputs.logos-capability-module.follows = "logos-capability-module";
       inputs.logos-cpp-sdk.follows = "logos-cpp-sdk";
       inputs.logos-module.follows = "logos-module";
@@ -200,6 +216,7 @@
       inputs.logos-libp2p-module.follows = "logos-libp2p-module";
       inputs.logos-module.follows = "logos-module";
       inputs.logos-module-builder.follows = "logos-module-builder";
+      inputs.logos-module-loader-qt.follows = "logos-module-loader-qt";
       inputs.logos-nix.follows = "logos-nix";
       inputs.logos-package.follows = "logos-package";
       inputs.logos-package-downloader-module.follows = "logos-package-downloader-module";
