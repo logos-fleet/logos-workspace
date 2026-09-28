@@ -223,3 +223,9 @@
 [submodule "repos/logos-evm-signer-cli"]
 	path = repos/logos-evm-signer-cli
 	url = https://github.com/logos-fleet/logos-evm-signer-cli.git
+[submodule "repos/logos-container-subprocess"]
+	path = repos/logos-container-subprocess
+	url = https://github.com/logos-fleet/logos-container-subprocess.git
+[submodule "repos/logos-module-loader-qt"]
+	path = repos/logos-module-loader-qt
+	url = https://github.com/logos-fleet/logos-module-loader-qt.git
