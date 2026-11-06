@@ -1,13 +1,17 @@
 # Mobile, library phase: Logos libraries on iOS and Android while the core is frozen
 
-Status: plan, 2026-11-06. Decisions in §6 were taken in a grilling session.
+Status: plan, 2026-11-06. Decisions in §7 were taken in a grilling session.
 Vocabulary: `CONTEXT.md` § *Mobile phases*. Rationale for the scope cut: ADR 0011.
 
 ## 1. Goal
 
-The libraries behind the delivery, storage and chat modules cross-compile for iOS and
-Android from origin inputs, load as dynamic libraries into a Qt app on a real device,
-and do real work there, with a dated ledger row per library, per platform.
+Two parts, in order:
+
+1. **Migration.** Move the fork's mobile work that survives the core freeze to origin.
+   The proof is one library, delivery, cross-compiled from origin inputs and running in a
+   Qt app on a real device.
+2. **Extras.** New work on the same path: chat, then storage, then mobile CI, plus an
+   optional wasm spike.
 
 Builds and evidence only. No module wrapper, no core.
 
@@ -24,63 +28,62 @@ Builds and evidence only. No module wrapper, no core.
 4. **Origin uses origin inputs.** No fork URL or revision in any delivered PR, and no fork
    reference to origin issues or PRs (workspace rule).
 
-## 3. Scope
+## 3. Migration
 
-| library | lang | C API | phase 1 |
+What moves from the forks to origin, and the minimum new work that makes it build there.
+This is the definition of done for the phase.
+
+| # | Repo | What | Source |
 |---|---|---|---|
-| `liblogosdelivery` (logos-delivery, contains nim-sds) | Nim | nim-ffi generated | **in** |
-| `libstorage` (logos-storage-nim) | Nim | nim-ffi generated | **in**: local, small quota, behind NAT/relays |
-| `libchat` (libchat) + embedded delivery | Rust | none: new small C API crate | **in** |
+| M1 | logos-basecamp | Shell preview stack, rebased and landed in order: iOS simulator → Android APK → physical iOS device. Basecamp with a mocked backend on mobile, and the pipeline the smoke app reuses | fork, already open on origin |
+| M2 | logos-nix | Rust and Nim cross-compile for the mobile targets with its DT_NEEDED gate: `4e21065` plus fixes `587b3f3`, `dc266f5`, `34d1cfb`, `9944271`, `693aa1f`, `c841b8d`. One or two PRs | fork |
+| M3 | logos-nix | iOS cross re-roots `find_package`: `fc4b091`. Needed for CMake-built native dependencies | fork |
+| M4 | logos-nix | Pass `xcodeVersion` / `xcodeBuild` in as arguments through `mkMobileTargets`. Replaces fork commit `e815779`, which hard-codes one Mac's Xcode | new, replaces fork |
+| M5 | logos-nix | Delivery recipe under `mobile/libs/`; logos-nix is the **caller** | the fork's "networking stack cross-built" result, re-homed |
+| M6 | logos-delivery | Cross-compile hygiene: plain `nim c` build, plus whatever breaks | new, as it surfaces |
+| M7 | logos-basecamp | Delivery smoke app in `mobile/smoke/`: start a node, relay and receive a message. Android first; iOS simulator next; iOS device after M1's device PR | new |
+
+Order: M1 and M4 in parallel; M2 and M3; then M5–M7 (Android → iOS simulator → iOS device).
+Signing belongs to app packaging (M1, M7), never to the library.
+
+**Fork logos-nix work deliberately left behind:**
+
+- Core phase: iOS Qt exports for Bare modules (`fc2342b`, `3f2c237`); liblogos_core's
+  dependency tail (`9572de2`, `fc87e23`).
+- Wasm phase: Emscripten pin and wasm Qt (`d0043d3`, `d89b850`, `9f3d4fa`, `53acb6c`).
+- Wallet modules only: iOS libcurl (`a3a9605`).
+- Never lands: the hard-coded Xcode version (`e815779`).
+- Unclear: 4 GB gradle heap (`c71a2a8`). Taken only if M1's APK build runs out of memory
+  against origin.
+
+## 4. Extras, in priority order
+
+| # | What | Repos | Why this order |
+|---|---|---|---|
+| E1 | **Chat**: a small C API crate in libchat over the `logos-chat` facade with `embedded-logos-delivery`, then a smoke check | libchat, logos-nix, logos-basecamp | In the core phase's module list, and it builds on delivery |
+| E2 | **Storage**: recipe, hygiene, smoke (upload and download via a devnet bootstrap, plus CPU/RSS/battery/data numbers for the local-versus-remote call); and the two-libraries-in-one-process check (delivery + storage, both Nim) | logos-storage-nim, nim-leopard, logos-nix, logos-basecamp | Never on the phone in the forks; first chance to measure the collision claim |
+| E3 | **`logos-mobile-ci`**: a reusable workflow on the pattern of `logos-windows-ci`, extracted once M7's Android job is proven. Android cross-compile on hosted Linux, iOS cross-compile on hosted macOS (no secrets: only app packaging signs), and an Android emulator smoke job | new repo, logos-basecamp, opt-ins in logos-delivery, nim-sds, logos-storage-nim, libchat | Wanted, but the migration doesn't need it |
+| E4 | **Wasm feasibility spike**, timeboxed, optional: compile delivery (Nim) and libchat (Rust) to wasm, list what breaks (nim-ffi's worker thread versus single-threaded wasm, sockets, chronos). Output is library issues, not PRs | none | Learning for the core phase only |
+
+## 5. Scope by library
+
+| library | lang | C API | status |
+|---|---|---|---|
+| `liblogosdelivery` (logos-delivery, contains nim-sds) | Nim | nim-ffi generated | **migration** |
+| `libchat` (libchat) + embedded delivery | Rust | none: new small C API crate | extra E1 |
+| `libstorage` (logos-storage-nim) | Nim | nim-ffi generated | extra E2: local, small quota, behind NAT/relays |
 | `liblogos_blockchain` (logos-blockchain) | Rust | cbindgen | **out**: a remote module on mobile; the phone never runs the node |
 
-Wasm: a timeboxed feasibility spike only (§4, step 9). Wasm modules are the core phase.
+## 6. Verification
 
-## 4. Sequence
+- **Device**: through the device lease queue (`docs/mobile-venue.md`). Each run gives a
+  dated `docs/evidence-ledger.md` row: command, device, OS, result.
+- **Migration done** when: M1–M7 are merged on origin; delivery's smoke app passes on an
+  Android device and an iOS device, built only from origin revisions; ledger rows exist for
+  both.
+- **CI** arrives with E3. Until then each PR is verified locally.
 
-1. **Basecamp Shell preview stack on origin**: iOS simulator → Android APK → physical iOS
-   device. Rebase on master, undraft and land in order. It is Basecamp with a mocked
-   backend on mobile, and its pipeline is the one the smoke apps reuse.
-2. **logos-nix**: pass `xcodeVersion` / `xcodeBuild` in as arguments through
-   `mkMobileTargets` (needed for any hosted iOS job), then upstream the fork's Nim and Rust
-   mobile cross-compile pieces. Add the library recipes under `mobile/libs/`; logos-nix is
-   the **caller**.
-   The iOS Qt `reduce_exports` rebuild is **not** needed: the libraries have no Qt.
-3. **First vertical slice: delivery on Android.** Recipe → `.so` → Qt smoke app in
-   `logos-basecamp/mobile/smoke/` → emulator CI job → leased-device run → ledger row.
-4. **Delivery on iOS.** Simulator first (ad-hoc signature); device once step 1's
-   device PR has landed (signing is the app's packaging step, never the library's).
-5. **Storage** on both platforms, plus the **two-libraries-in-one-process** case
-   (delivery + storage, both Nim) so that "no symbol collision" is measured, not assumed.
-6. **Chat**: a small C API crate in libchat over the `logos-chat` facade with
-   `embedded-logos-delivery`, then both platforms.
-7. **`logos-mobile-ci`**: a reusable workflow on the pattern of `logos-windows-ci`,
-   extracted once step 3's CI job is proven. Opt-ins: logos-delivery, nim-sds,
-   logos-storage-nim, libchat.
-8. **Suspend/resume scenario** per library (background N min → resume → recovers),
-   batched into device leases.
-9. **Wasm feasibility spike**, timeboxed, in parallel from step 3: compile delivery (Nim)
-   and libchat (Rust) to wasm, list what breaks (nim-ffi's worker thread versus
-   single-threaded wasm, sockets, chronos), and file library issues. No runtime.
-
-Library hygiene PRs (plain `nim c` builds, test executables made optional, portability
-guards) land as they surface.
-
-## 5. Verification
-
-- **Per library PR (CI)**: Android cross-compile on hosted Linux, iOS cross-compile
-  (device + simulator) on hosted macOS. Compile and link only; no secrets needed, because
-  only app packaging signs.
-- **Smoke (CI)**: Android emulator runs the Basecamp smoke app against the fresh library.
-- **Device (manual)**: through the device lease queue (`docs/mobile-venue.md`). Each run
-  gives a dated `docs/evidence-ledger.md` row: command, device, OS, result.
-- **Smoke assertions per library**:
-  - delivery: start node, relay and receive a message
-  - storage: upload and download a file via a devnet bootstrap, plus CPU/RSS/battery/data
-    numbers for the local-versus-remote call
-  - chat: send and receive over embedded delivery
-  - all: suspend/resume recovery
-
-## 6. Decisions
+## 7. Decisions
 
 | # | Decision | Alternative rejected |
 |---|---|---|
@@ -92,20 +95,21 @@ guards) land as they surface.
 | L6 | Chat = libchat facade + embedded delivery, with a new C API crate | generic-chat with app-side transport glue: that glue is the core's job |
 | L7 | Blockchain out: a remote module on mobile | Node cross-build or a C API over `wallet-http-client`: a parallel remote mechanism the core replaces, and nobody needs a mobile wallet before the new core |
 | L8 | Storage local, small quota; the numbers decide local versus remote for the core phase | Client-only mode: a remote module is self-sufficient, so no library needs a client mode |
-| L9 | Suspend/resume is a smoke scenario, not a spike | A separate spike: same test, more ceremony |
-| L10 | Central `logos-mobile-ci`, libraries only | Module repos too: no new-architecture modules exist yet |
-| L11 | Wasm: feasibility spike only | Full wasm phase now: networking libraries need the outbound door, which is core |
+| L9 | No suspend/resume testing in this phase | A smoke scenario: not needed for the migration |
+| L10 | Central `logos-mobile-ci`, libraries only, as an extra | Module repos too: no new-architecture modules exist yet. CI inside the migration: not needed to land it |
+| L11 | Wasm: optional feasibility spike only | Full wasm phase now: networking libraries need the outbound door, which is core |
+| L12 | Migration = what survives the freeze, proved on delivery alone | Port all 29 fork logos-nix commits: most serve the core, wasm or wallet modules |
 
-## 7. Existing origin PRs
+## 8. Existing origin PRs
 
-- Shell preview stack (Basecamp): keep, rebase, land (step 1).
+- Shell preview stack (Basecamp): keep, rebase, land (M1).
 - `logos-protocol` and `logos-plugin-qt` shared-library opt-outs, `logos-module` iOS CLI
   guard, `process-stats` iOS guard: **parked**. They are left open and untouched, each with
   a comment that it waits for the new core. Only the core's cross-compile chain uses them.
 - `docs/liblogos-mobile-delivery-plan.md`: superseded for this phase. Its Layer 3 waits for
   the core to unfreeze.
 
-## 8. Core phase (after unfreeze, not planned here)
+## 9. Core phase (after unfreeze, not planned here)
 
 Core plus selected modules on mobile: delivery, chat, storage local or remote by L8's
 numbers, blockchain remote. Wasm modules. The three blocking decisions in
