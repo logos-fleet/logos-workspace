@@ -83,3 +83,28 @@ _Avoid_: mobile build (a sideloaded Android build is mobile but not a Store shel
 **Bundled set**:
 The modules a Store shell embeds at build time, pulled as signed native variants from the catalog. Closed under dependencies.
 _Avoid_: built-in modules, first-party set (ownership is not the criterion)
+
+### Mobile phases
+
+**Library phase**:
+The mobile work done while the core is frozen. It proves the libraries behind modules on devices, through the libraries' own C API, with no module wrapper and no core.
+_Avoid_: phase 1 (the numbering changes), mobile POC
+
+**Core phase**:
+The mobile work that begins once the new core unfreezes: the core and selected modules running on a device, then wasm modules.
+
+**Frozen repo**:
+A repository the new core is replacing. During the library phase nothing is delivered to it.
+_Avoid_: core (too narrow: the freeze also covers the protocol, the loader, the host and the package manager)
+
+**Caller**:
+Whoever builds a library and decides how: target, linkage, sealing. On mobile in the library phase the caller is logos-nix. The library itself states only what it is.
+_Avoid_: consumer, integrator
+
+**Smoke app**:
+A minimal app that loads one or more libraries on a device and asserts that they do real work. It is a proof vehicle, never a product.
+_Avoid_: harness, test app, demo
+
+**Remote module**:
+A module that runs in full on a liblogos the phone does not host, reached through the core. It needs no special mode in its library.
+_Avoid_: client mode, light module, remote core (the core still runs on the phone)
